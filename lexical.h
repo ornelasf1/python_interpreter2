@@ -10,6 +10,8 @@ enum TOKENS{
     INTEGER,
     ADD_OP,
     SUB_OP,
+    MULT_OP,
+    DIV_OP,
     ASSIGN_OP,
     LEFT_PAREN,
     RIGHT_PAREN,
@@ -24,7 +26,8 @@ enum TOKENS{
 enum CHARCLASS{
     DIGIT,
     LETTER,
-    OTHER
+    OTHER,
+    CHAR_END
 };
 
 extern std::ifstream inputFile;

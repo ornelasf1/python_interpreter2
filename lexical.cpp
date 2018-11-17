@@ -19,10 +19,12 @@ void getChar(){
         }
     }else{
         printf("EOF\n");
+        charClass = CHAR_END;
         nextToken = END;
     }
 }
 void lex(){
+    string oldLex = lexeme;
     lexeme = "";
     processSpaces();
     switch (charClass){
@@ -48,7 +50,10 @@ void lex(){
         lookup(nextChar);
         getChar();
         break;
+    default:
+        nextToken = END;
     }
+    cout << oldLex << " -> " << lexeme << endl;
 
     if (lexeme == "\n"){
         cout << "Found line break" << endl << endl;
@@ -79,6 +84,22 @@ void lookup(char c){
         case '=':
             addChar();
             nextToken = ASSIGN_OP;
+            break;
+        case '+':
+            addChar();
+            nextToken = ADD_OP;
+            break;
+        case '-':
+            addChar();
+            nextToken = SUB_OP;
+            break;
+        case '*':
+            addChar();
+            nextToken = MULT_OP;
+            break;
+        case '/':
+            addChar();
+            nextToken = DIV_OP;
             break;
         case '(':
             addChar();

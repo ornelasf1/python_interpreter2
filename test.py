@@ -1,3 +1,1 @@
-print("hello world")
-
-
+x=x * y / (5 * z) + 10

@@ -6,13 +6,14 @@
 
 extern void parse();
 
-template<class T>
 class Variable{
+    public:
+    Variable();
     Variable(std::string);
-    Variable(std::string, T value);
-    void setValue(T value);
+    Variable(std::string, std::string value);
+    void setValue(std::string value);
     std::string name;
-    T value;
+    std::string value;
 };
 
 #endif

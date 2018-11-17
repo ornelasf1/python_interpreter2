@@ -3,7 +3,6 @@
 #include "parser.h"
 #include <string>
 #include <vector>
-#include <stack>
 
 using std::string;
 
@@ -29,13 +28,11 @@ void assignmentRule();
  * <term> -> <factor> {(*|/)<factor>}
  * <factor> -> <variable> | integer | ( <expr> ) | " <identifier> "
  */
-void expressionRule();
-void termRule();
-void factorRule();
-std::vector<string> exprTokens;
-string evaluate(std::vector<string>);
+string expressionRule();
+string termRule();
+string factorRule();
 
-//string evaluate(string opd1, const char* op, string opd2);
+string evaluate(string opd1, const char* op, string opd2);
 string* variableLookup(string var);
 bool is_number(const string&);
 
@@ -114,14 +111,8 @@ void assignmentRule(){
         lex();
         if(nextToken == ASSIGN_OP){
             lex();
-            expressionRule();
-            string t = evaluate(exprTokens);
-            while(!exprTokens.empty()){
-                printf("%s\n", exprTokens[0].c_str());
-                exprTokens.erase(exprTokens.begin());
-            }
-            
-            //printf("Value is %s\n", var->value.c_str());
+            var->value = expressionRule();
+            printf("Value is %s\n", var->value.c_str());
         }else{
             throw string("Syntax Error: Expected = after identifier\n");
         }
@@ -140,39 +131,57 @@ void functionRule(){
 
 }
 
-void expressionRule(){
+string expressionRule(){
     printf("Expression rule entered with %s\n", lexeme.c_str());
 
     try{
-        termRule();
-        while(nextToken == ADD_OP || nextToken == SUB_OP){
-            exprTokens.push_back(lexeme);
+        //lex();
+        string operand1 = termRule();
+        printf("Expr: Operand 1: %s\n", operand1.c_str());
+        string operand2 = "";
+        string op = "";
+        //lex();
+        if(nextToken == ADD_OP || nextToken == SUB_OP){
+            op = lexeme;
             lex();
-            termRule();
+            operand2 = termRule();
+            printf("Expr: Operand 2: %s\n", operand2.c_str());
+        }else if(nextToken == MULT_OP || nextToken == DIV_OP){
+            lex();
+            operand2 = termRule();
+            printf("Expr: Operand 2: %s\n", operand2.c_str());
         }
-
+        return evaluate(operand1, op.c_str(), operand2);
     }catch(string s){
         printf("%s\n", s.c_str());
     }
 }
 
-void termRule(){
+string termRule(){
     printf("Term rule entered with %s\n", lexeme.c_str());
-
-    factorRule();
-    while(nextToken == MULT_OP || nextToken == DIV_OP){
-        exprTokens.push_back(lexeme);
+    string operand1 = factorRule();
+    printf("Term: Operand 1: %s\n", operand1.c_str());
+    string operand2 = "";
+    string op = "";
+    //lex();
+    if (nextToken == MULT_OP || nextToken == DIV_OP){
+        op = lexeme;
         lex();
-        factorRule();
+        operand2 = factorRule();
+        printf("Term: Operand 2: %s\n", operand2.c_str());
     }
+    if(nextToken == ADD_OP || nextToken == SUB_OP) return operand1;
+    printf("Evaluating: %s %s %s\n", operand1.c_str(), op.c_str(), operand2.c_str());
+    return evaluate(operand1, op.c_str(), operand2);
 }
 
-void factorRule(){
+string factorRule(){
     printf("Factor rule entered with %s\n", lexeme.c_str());
     
     if(nextToken == IDENTIFIER || nextToken == INTEGER){
-        exprTokens.push_back(lexeme);
+        string aux = lexeme;
         lex();
+        return aux;
     }else if(nextToken == STRING_QUOTE){
         string stringVal = "";
         lex();
@@ -182,11 +191,9 @@ void factorRule(){
         }
 
     }else if(nextToken == LEFT_PAREN){
-        exprTokens.push_back(lexeme);
         lex();
-        expressionRule();
+        return expressionRule();
         if(nextToken == RIGHT_PAREN){
-            exprTokens.push_back(lexeme);
             lex();
         }else{
             throw string("Syntax Error: No matching )");
@@ -194,95 +201,36 @@ void factorRule(){
     }
 }
 
-string evaluate(std::vector<string> s){
-    string postfix = "";
-    std::stack<string> pfStack;
 
-    //Lambda function in C++11
-    auto op_prec = [](const char* c){
-        switch(*c){
-            case '+':
-                return 1;
-            case '-':
-                return 1;
-            case '*':
-                return 2;
-            case '/':
-                return 2;
-            case '(':
-                return 3;
-            default:
-                return 0;
-        }
-    };
-
-    for(int i = 0; i < s.size(); i++){
-        if(op_prec(s[i].c_str()) == 0){
-            printf("%s is not an operator\n", s[i].c_str());
-            postfix += s[i];
-        }else{
-            printf("%s is an operator\n", s[i].c_str());
-            if(pfStack.empty()){
-                pfStack.push(s[i]);
-            }else{
-                if(s[i] == ")"){
-                    while(pfStack.top() != "("){
-                        postfix += pfStack.top();
-                        pfStack.pop();
-                    }
-                    pfStack.pop();
-                }else if(s[i] == "("){
-                    pfStack.push(s[i]);
-                }else if(pfStack.top() == "("){
-                    pfStack.push(s[i]);
-                }else{
-                    while(!pfStack.empty() && (op_prec(pfStack.top().c_str()) >= op_prec(s[i].c_str()))){
-                        postfix += pfStack.top();
-                        pfStack.pop();
-                        pfStack.push(s[i]);
-                    }
-                    pfStack.push(s[i]);
-                }
-            }
-        }
+string evaluate(string opd1, const char* op, string opd2){
+    int result;
+    int operand1;
+    if(is_number(opd1)){
+        operand1 = atoi(opd1.c_str());
     }
-    while(!pfStack.empty()){
-        postfix += pfStack.top();
-        pfStack.pop();
+    int operand2;
+    if(is_number(opd2)){
+        operand2 = atoi(opd2.c_str());
     }
-
-    printf("Postfix: %s\n", postfix.c_str());
+    switch(*op){
+        case '+':
+            result = operand1 + operand2;
+            break;
+        case '-':
+            result = operand1 - operand2;
+            break;
+        case '*':
+            result = operand1 * operand2;
+            break;
+        case '/':
+            result = operand1 / operand2;
+            break;
+        default:
+            result = 0;
+            break;
+    }
+    return std::to_string(result);
 }
-
-// string evaluate(string opd1, const char* op, string opd2){
-//     int result;
-//     int operand1;
-//     if(is_number(opd1)){
-//         operand1 = atoi(opd1.c_str());
-//     }
-//     int operand2;
-//     if(is_number(opd2)){
-//         operand2 = atoi(opd2.c_str());
-//     }
-//     switch(*op){
-//         case '+':
-//             result = operand1 + operand2;
-//             break;
-//         case '-':
-//             result = operand1 - operand2;
-//             break;
-//         case '*':
-//             result = operand1 * operand2;
-//             break;
-//         case '/':
-//             result = operand1 / operand2;
-//             break;
-//         default:
-//             result = 0;
-//             break;
-//     }
-//     return std::to_string(result);
-// }
 
 string* variableLookup(string var){
     for(Variable* v : userVariables){
