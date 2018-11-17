@@ -1,4 +1,3 @@
-def x():
-    print("hello world")
+print("hello world")
 
-x()
+

@@ -4,7 +4,9 @@
 
 using namespace std;
 
-void getChar(){
+Lexical::Lexical(){}
+
+void Lexical::getChar(){
     if(inputFile.get(nextChar)){
         if(isalpha(nextChar)){
             printf("Char: %c\n", nextChar);
@@ -19,49 +21,58 @@ void getChar(){
         }
     }else{
         printf("EOF\n");
-        nextToken = END;
+        token = END;
     }
 }
-void lex(){
+void Lexical::lex(){
     lexeme = "";
     processSpaces();
-    switch (charClass){
+    switch (charClass)
+    {
     case LETTER:
         addChar();
         getChar();
-        while (charClass == LETTER || charClass == DIGIT){
+        while (charClass == LETTER || charClass == DIGIT)
+        {
             addChar();
             getChar();
         }
-        nextToken = IDENTIFIER;
+        token = IDENTIFIER;
         break;
     case DIGIT:
         addChar();
         getChar();
-        while (charClass == DIGIT){
+        while (charClass == DIGIT)
+        {
             addChar();
             getChar();
         }
-        nextToken = INTEGER;
+        token = INTEGER;
         break;
     case OTHER:
         lookup(nextChar);
         getChar();
         break;
     }
-
-    if (lexeme == "\n"){
-        cout << "Found line break" << endl << endl;
-    }else if (lexeme == "\t"){
-        cout << "Found indent" << endl << endl;
-    }else{
-        cout << "Found " << lexeme << endl << endl;
+    if (lexeme == "\n")
+    {
+        cout << "Found line break" << endl
+             << endl;
     }
-    tokens.push_back(nextToken);
+    else if (lexeme == "\t")
+    {
+        cout << "Found indent" << endl
+             << endl;
+    }
+    else
+    {
+        cout << "Found " << lexeme << endl
+             << endl;
+    }
+    tokens.push_back(token);
     lexemes.push_back(lexeme);
 }
-
-void processSpaces(){
+void Lexical::processSpaces(){
     int spaces = indentCount;
     while(isspace(nextChar) && nextChar != '\n'){
         cout << spaces << endl;
@@ -74,48 +85,48 @@ void processSpaces(){
         getChar();
     }
 }
-void lookup(char c){
+void Lexical::lookup(char c){
     switch(c){
         case '=':
             addChar();
-            nextToken = ASSIGN_OP;
+            token = ASSIGN_OP;
             break;
         case '(':
             addChar();
-            nextToken = LEFT_PAREN;
+            token = LEFT_PAREN;
             break;
         case ')':
             addChar();
-            nextToken = RIGHT_PAREN;
+            token = RIGHT_PAREN;
             break;
         case ':':
             addChar();
-            nextToken = COLON;
+            token = COLON;
             break;
         case '"':
             addChar();
-            nextToken = STRING_QUOTE;
+            token = STRING_QUOTE;
             break;
         case '\'':
             addChar();
-            nextToken = CHAR_QUOTE;
+            token = CHAR_QUOTE;
             break;
         case '\t':
             addChar();
-            nextToken = INDENT;
+            token = INDENT;
             break;
         case '\n':
             addChar();
-            nextToken = LINEBREAK;
+            token = LINEBREAK;
             break;
         default:
-            nextToken = END;
+            token = END;
             break;
 
     }
 }
 
-void addChar(){
+void Lexical::addChar(){
     if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') cout << "Add space" << endl;
     lexeme += nextChar;
 };

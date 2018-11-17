@@ -2,6 +2,9 @@
 #include <string>
 #include <fstream>
 
+#ifndef LEX_H
+#define LEX_H
+
 enum TOKENS{
     IDENTIFIER,
     INTEGER,
@@ -24,22 +27,22 @@ enum CHARCLASS{
     OTHER
 };
 
-class Lexical{
-    ifstream inputFile;
-    std::string lexeme;
-    char nextChar;
-    CHARCLASS charClass;
-    TOKENS token;
-    std::vector<TOKENS> tokens;
-    std::vector<std::string> lexemes;
-    int indentCount;
-    void getChar();
-    void lex();
-    void processSpaces();
-    void lookup(char);
-    void addChar();
-}
+extern std::ifstream inputFile;
+extern std::string lexeme;
+extern char nextChar;
+extern CHARCLASS charClass;
+extern TOKENS nextToken;
+extern std::vector<TOKENS> tokens;
+extern std::vector<std::string> lexemes;
+extern int indentCount;
+extern bool endProgram;
 
+extern void getChar();
+extern void lex();
+extern void processSpaces();
+extern void lookup(char);
+extern void addChar();
 
+#endif
 
 
