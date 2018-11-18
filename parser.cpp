@@ -9,6 +9,8 @@ using std::string;
 
 /** 
  *<line> -> print ( " {<identifier>} " )
+            | print ( {<identifier>} )
+            | print ( " {<identifier>} " , {<identifier>} )
  */
 void printRule();
 
@@ -36,7 +38,7 @@ std::vector<string> exprTokens;
 string evaluate(std::vector<string>);
 
 //string evaluate(string opd1, const char* op, string opd2);
-string* variableLookup(string var);
+string variableLookup(string var);
 bool is_number(const string&);
 
 const string reservedKeywords[] = {"print", "def"};
@@ -66,34 +68,53 @@ void printRule(){
         lex();
         if (nextToken == LEFT_PAREN){
             printf("lexeme is '('\n");
-            lex();
-            if (nextToken == STRING_QUOTE){
-                printf("lexeme is '\"'\n");
-
+            do{
                 lex();
-                while(nextToken != STRING_QUOTE){
-                    printString += (lexeme + " ");
-                    lex();
-                }
+                if (nextToken == STRING_QUOTE){
+                    printf("lexeme is '\"'\n");
 
-                if(nextToken == STRING_QUOTE){
                     lex();
-                    if(nextToken == RIGHT_PAREN){
-                        printf("print works: %s\n", printString.c_str());
+                    while (nextToken != STRING_QUOTE){
+                        printString += (lexeme + " ");
                         lex();
-                        if(nextToken == LINEBREAK){
+                    }
+
+                    if (nextToken == STRING_QUOTE){
+                        lex();
+                        printf("print works str: %s\n", printString.c_str());
+                        if (nextToken == RIGHT_PAREN){
+                            lex();
+                            if (nextToken == LINEBREAK || nextToken == END){
+                                return;
+                            }
+                            else{
+                                throw string("Syntax Error: Expected \\n after )");
+                            }
+                        }else{
+                            printf("str: Failed ) and moving to %s\n", lexeme.c_str());
+                            //throw string("Syntax Error: Expected ) after \"");
+                        }
+                    }else{
+                        throw string("Syntax Error: Expected \" after string literal");
+                    }
+                }else if (nextToken == IDENTIFIER){
+                    string varValue = variableLookup(lexeme);
+                    lex();
+                    if (nextToken == RIGHT_PAREN){
+                        printf("print works var: %s\n", varValue.c_str());
+                        lex();
+                        printf("%d\n", nextToken);
+                        if (nextToken == LINEBREAK || nextToken == END){
+                            return;
                         }else{
                             throw string("Syntax Error: Expected \\n after )");
                         }
                     }else{
-                        throw string("Syntax Error: Expected ) after \"");
+                        printf("var: Failed ) and moving to %s\n", lexeme.c_str());
+                        //throw string("Syntax Error: Expected ) after variable");
                     }
-                }else{
-                    throw string("Syntax Error: Expected \" after string literal");
                 }
-            }else{
-                throw string("Syntax Error: Expected \" after (");
-            }
+            }while(nextToken == COMMA);
         }else{
             throw string("Syntax Error: Expected ( after 'print'");
         }
@@ -102,6 +123,7 @@ void printRule(){
         endProgram = true;
     }
 }
+
 
 void assignmentRule(){
     printf("Assignment rule entered\n");
@@ -115,12 +137,11 @@ void assignmentRule(){
         if(nextToken == ASSIGN_OP){
             lex();
             expressionRule();
-            string t = evaluate(exprTokens);
+            var->value = evaluate(exprTokens); 
             while(!exprTokens.empty()){
                 printf("%s\n", exprTokens[0].c_str());
                 exprTokens.erase(exprTokens.begin());
             }
-            
             //printf("Value is %s\n", var->value.c_str());
         }else{
             throw string("Syntax Error: Expected = after identifier\n");
@@ -197,6 +218,7 @@ void factorRule(){
 string evaluate(std::vector<string> s){
     string postfix = "";
     std::stack<string> pfStack;
+    std::stack<string> evaluateStack;
 
     //Lambda function in C++11
     auto op_prec = [](const char* c){
@@ -211,6 +233,8 @@ string evaluate(std::vector<string> s){
                 return 2;
             case '(':
                 return 3;
+            case ')':
+                return 3;
             default:
                 return 0;
         }
@@ -219,7 +243,9 @@ string evaluate(std::vector<string> s){
     for(int i = 0; i < s.size(); i++){
         if(op_prec(s[i].c_str()) == 0){
             printf("%s is not an operator\n", s[i].c_str());
-            postfix += s[i];
+            
+            //postfix += s[i];
+            evaluateStack.push(s[i]);
         }else{
             printf("%s is an operator\n", s[i].c_str());
             if(pfStack.empty()){
@@ -227,7 +253,8 @@ string evaluate(std::vector<string> s){
             }else{
                 if(s[i] == ")"){
                     while(pfStack.top() != "("){
-                        postfix += pfStack.top();
+                        //postfix += pfStack.top();
+                        evaluateStack.push(pfStack.top());
                         pfStack.pop();
                     }
                     pfStack.pop();
@@ -237,60 +264,77 @@ string evaluate(std::vector<string> s){
                     pfStack.push(s[i]);
                 }else{
                     while(!pfStack.empty() && (op_prec(pfStack.top().c_str()) >= op_prec(s[i].c_str()))){
-                        postfix += pfStack.top();
+                        evaluateStack.push(pfStack.top());
+                        //postfix += pfStack.top();
                         pfStack.pop();
-                        pfStack.push(s[i]);
                     }
                     pfStack.push(s[i]);
                 }
             }
+
         }
     }
     while(!pfStack.empty()){
-        postfix += pfStack.top();
+        //postfix += pfStack.top();
+        evaluateStack.push(pfStack.top());
         pfStack.pop();
     }
 
-    printf("Postfix: %s\n", postfix.c_str());
-}
+    //Reverses stack order
+    std::stack<string> aux;
+    while (!evaluateStack.empty())
+    {
+        aux.push(evaluateStack.top());
+        evaluateStack.pop();
+    }
+    evaluateStack = aux;
 
-// string evaluate(string opd1, const char* op, string opd2){
-//     int result;
-//     int operand1;
-//     if(is_number(opd1)){
-//         operand1 = atoi(opd1.c_str());
-//     }
-//     int operand2;
-//     if(is_number(opd2)){
-//         operand2 = atoi(opd2.c_str());
-//     }
-//     switch(*op){
-//         case '+':
-//             result = operand1 + operand2;
-//             break;
-//         case '-':
-//             result = operand1 - operand2;
-//             break;
-//         case '*':
-//             result = operand1 * operand2;
-//             break;
-//         case '/':
-//             result = operand1 / operand2;
-//             break;
-//         default:
-//             result = 0;
-//             break;
-//     }
-//     return std::to_string(result);
-// }
+    string operand1;
+    string operand2;
+    string op;
+    string result;
+    std::stack<string> results;
+    while(!evaluateStack.empty()){
+        if(op_prec(evaluateStack.top().c_str()) == 0){
+            results.push(evaluateStack.top());
+            evaluateStack.pop();
+        }else{
+            printf("%s is an operator", evaluateStack.top().c_str());
 
-string* variableLookup(string var){
-    for(Variable* v : userVariables){
-        if(v->name == var){
-            return new string(v->value);
+            operand1 = results.top(); results.pop();
+            operand2 = results.top(); results.pop();
+
+            if(!is_number(operand1)) operand1 = variableLookup(operand1);
+            if(!is_number(operand2)) operand2 = variableLookup(operand2);
+
+            op = evaluateStack.top(); evaluateStack.pop();
+            printf(" - evaluating: %s %s %s - ", operand1.c_str(), op.c_str(), operand2.c_str());
+
+            if(op == "+"){
+                result = std::to_string(atoi(operand1.c_str()) + atoi(operand2.c_str()));
+            }else if(op == "-"){
+                result = std::to_string(atoi(operand1.c_str()) - atoi(operand2.c_str()));
+            }else if(op == "*"){
+                result = std::to_string(atoi(operand1.c_str()) * atoi(operand2.c_str()));
+            }else if(op == "/"){
+                result = std::to_string(atoi(operand2.c_str()) / atoi(operand1.c_str()));
+            }
+            results.push(result);
+            printf(" result is %s\n", result.c_str());
         }
     }
-    return NULL;
+    printf("Result is %s\n", results.top().c_str());
+    return results.top();
+}
+
+string variableLookup(string var){
+    for(Variable* v : userVariables){
+        if(v->name == var){
+            return v->value;
+        }
+    }
+    throw string("Variable '%s' is undefined\n", var.c_str());
+    return "";
 }
 
 bool is_number(const string& s){

@@ -1,1 +1,2 @@
-x=x * y / (5 * z) + 10
+x= 1 + 2
+print("hello: this is a test, (here too )", x)

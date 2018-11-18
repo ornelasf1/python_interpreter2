@@ -18,6 +18,7 @@ std::vector<TOKENS> tokens;
 std::vector<std::string> lexemes;
 int indentCount;
 bool endProgram;
+bool string_literal;
 void getChar();
 void lex();
 void processSpaces();
@@ -26,10 +27,31 @@ void addChar();
 
 void parse();
 
+char* tksnames[] = {
+    "IDENTIFIER",
+    "INTEGER",
+    "STRING_LITERAL",
+    "ADD_OP",
+    "SUB_OP",
+    "MULT_OP",
+    "DIV_OP",
+    "ASSIGN_OP",
+    "LEFT_PAREN",
+    "RIGHT_PAREN",
+    "STRING_QUOTE",
+    "CHAR_QUOTE",
+    "COLON",
+    "COMMA",
+    "INDENT",
+    "LINEBREAK",
+    "END"
+};
+
 
 int main(int argc, char** argv){
     indentCount = 4;
     endProgram = false;
+    string_literal = false;
     string filename;
     try{
         if(argc == 2){
@@ -63,6 +85,12 @@ int main(int argc, char** argv){
         if(lexemes[i] == "\t") cout << "indent ";
         else if(lexemes[i] == "\n") cout << "linebreak ";
         else cout << lexemes[i] << " ";
+    }
+    cout << endl;
+
+    printf("PRINTING TOKENS\n");
+    for(int i = 0; i < tokens.size(); i++){
+        cout << tksnames[tokens[i]] << " ";
     }
     cout << endl;
 

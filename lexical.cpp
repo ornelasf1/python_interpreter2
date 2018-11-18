@@ -16,6 +16,10 @@ void getChar(){
             if(nextChar != '\n') printf("Other: %c\n", nextChar);
             else printf("Other: \\n\n");
             charClass = OTHER;
+            if(nextChar == '"'){
+                string_literal = !string_literal;
+                printf("Activate string literal\n");
+            }
         }
     }else{
         printf("EOF\n");
@@ -31,11 +35,13 @@ void lex(){
     case LETTER:
         addChar();
         getChar();
-        while (charClass == LETTER || charClass == DIGIT){
+        if(string_literal) nextToken = STRING_LITERAL;
+        else nextToken = IDENTIFIER;
+        while (charClass == LETTER || charClass == DIGIT || string_literal){
             addChar();
             getChar();
         }
-        nextToken = IDENTIFIER;
+        
         break;
     case DIGIT:
         addChar();
@@ -68,7 +74,7 @@ void lex(){
 
 void processSpaces(){
     int spaces = indentCount;
-    while(isspace(nextChar) && nextChar != '\n'){
+    while(isspace(nextChar) && nextChar != '\n' && !string_literal){
         cout << spaces << endl;
         if(--spaces == 0){
             charClass = OTHER;
@@ -112,6 +118,10 @@ void lookup(char c){
         case ':':
             addChar();
             nextToken = COLON;
+            break;
+        case ',':
+            addChar();
+            nextToken = COMMA;
             break;
         case '"':
             addChar();

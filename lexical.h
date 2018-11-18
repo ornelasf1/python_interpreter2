@@ -8,6 +8,7 @@
 enum TOKENS{
     IDENTIFIER,
     INTEGER,
+    STRING_LITERAL,
     ADD_OP,
     SUB_OP,
     MULT_OP,
@@ -18,6 +19,7 @@ enum TOKENS{
     STRING_QUOTE,
     CHAR_QUOTE,
     COLON,
+    COMMA,
     INDENT,
     LINEBREAK,
     END
@@ -39,6 +41,7 @@ extern std::vector<TOKENS> tokens;
 extern std::vector<std::string> lexemes;
 extern int indentCount;
 extern bool endProgram;
+extern bool string_literal;
 
 extern void getChar();
 extern void lex();
