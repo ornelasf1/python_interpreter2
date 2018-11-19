@@ -19,6 +19,7 @@ std::vector<std::string> lexemes;
 int indentCount;
 bool endProgram;
 bool string_literal;
+bool indent;
 void getChar();
 void lex();
 void processSpaces();
@@ -27,7 +28,7 @@ void addChar();
 
 void parse();
 
-char* tksnames[] = {
+string tksnames[] = {
     "IDENTIFIER",
     "INTEGER",
     "STRING_LITERAL",
@@ -36,6 +37,13 @@ char* tksnames[] = {
     "MULT_OP",
     "DIV_OP",
     "ASSIGN_OP",
+    "COND_EQUAL",
+    "COND_GTEQ",
+    "COND_GT",
+    "COND_LTEQ",
+    "COND_LT",
+    "COND_AND",
+    "COND_OR",
     "LEFT_PAREN",
     "RIGHT_PAREN",
     "STRING_QUOTE",
@@ -52,6 +60,7 @@ int main(int argc, char** argv){
     indentCount = 4;
     endProgram = false;
     string_literal = false;
+    indent = true;
     string filename;
     try{
         if(argc == 2){

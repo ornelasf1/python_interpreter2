@@ -15,6 +15,18 @@ using std::string;
 void printRule();
 
 /**
+ * <ifstmt> -> if ( {<boolexpr>} ) : linebreak {indent} <statement> {linebreak <statement>}
+ */
+void ifstmtRule();
+
+/**
+ * <boolexpr> -> <identifier> {(and|or) <identifier>}
+ *              | <expr> (and|or|<|<=|>|>=|==) <expr>
+ *            
+ */
+bool booleanExprRule();
+
+/**
  *<line> -> def <identifier> ( ) : {<linebreak> <indent> <line>}
  */
 void functionRule();
@@ -41,11 +53,12 @@ string evaluate(std::vector<string>);
 string variableLookup(string var);
 bool is_number(const string&);
 
-const string reservedKeywords[] = {"print", "def"};
+const string reservedKeywords[] = {"print", "def", "if", "and", "or"};
 
 std::vector<Variable*> userVariables;
 
 void parse(){
+    printf("Enter parse\nParsing '%s'\n", lexeme.c_str());
     if(nextToken == IDENTIFIER){
         if(lexeme == "print"){
             printf("lexeme is 'print'\n");
@@ -53,6 +66,9 @@ void parse(){
         }else if(lexeme == "def"){
             printf("lexeme is 'def'\n");
             functionRule();
+        }else if(lexeme == "if"){
+            printf("lexeme is 'if'\n");
+            ifstmtRule();
         }else{
             printf("lexeme is '%s'\n", lexeme.c_str());
             assignmentRule();
@@ -63,63 +79,64 @@ void parse(){
 void printRule(){
     printf("Print rule entered\n");
     string printString = "";
-    printf("Testing lexeme: %s\n", lexeme.c_str());
     try{
         lex();
         if (nextToken == LEFT_PAREN){
-            printf("lexeme is '('\n");
             do{
                 lex();
                 if (nextToken == STRING_QUOTE){
-                    printf("lexeme is '\"'\n");
-
                     lex();
-                    while (nextToken != STRING_QUOTE){
-                        printString += (lexeme + " ");
-                        lex();
-                    }
 
-                    if (nextToken == STRING_QUOTE){
+                    if(nextToken == STRING_LITERAL){
+                        printString += lexeme;
                         lex();
-                        printf("print works str: %s\n", printString.c_str());
-                        if (nextToken == RIGHT_PAREN){
+
+                        if (nextToken == STRING_QUOTE){
                             lex();
-                            if (nextToken == LINEBREAK || nextToken == END){
-                                return;
-                            }
-                            else{
-                                throw string("Syntax Error: Expected \\n after )");
+                            printf("print works str: %s\n", printString.c_str());
+                            if (nextToken == RIGHT_PAREN){
+                                lex();
+                                if (nextToken == LINEBREAK || nextToken == END){
+                                    break;
+                                }
+                                else{
+                                    throw string("Expected \\n after )");
+                                }
+                            }else{
+                                printf("str: Failed ) and moving to %s\n", lexeme.c_str());
+                                //throw string("Expected ) after \"");
                             }
                         }else{
-                            printf("str: Failed ) and moving to %s\n", lexeme.c_str());
-                            //throw string("Syntax Error: Expected ) after \"");
+                            throw string("Expected \" after string literal");
                         }
                     }else{
-                        throw string("Syntax Error: Expected \" after string literal");
+                        throw string("Expected string literal after \"");
                     }
                 }else if (nextToken == IDENTIFIER){
                     string varValue = variableLookup(lexeme);
+                    printString += varValue;
+                    printf("print works var: %s\n", varValue.c_str());
                     lex();
                     if (nextToken == RIGHT_PAREN){
-                        printf("print works var: %s\n", varValue.c_str());
                         lex();
                         printf("%d\n", nextToken);
                         if (nextToken == LINEBREAK || nextToken == END){
-                            return;
+                            break;
                         }else{
-                            throw string("Syntax Error: Expected \\n after )");
+                            throw string("Expected \\n after )");
                         }
                     }else{
                         printf("var: Failed ) and moving to %s\n", lexeme.c_str());
-                        //throw string("Syntax Error: Expected ) after variable");
+                        //throw string("Expected ) after variable");
                     }
                 }
             }while(nextToken == COMMA);
+            printf("OUTPUT: %s\n", printString.c_str());
         }else{
-            throw string("Syntax Error: Expected ( after 'print'");
+            throw string("Expected ( after 'print'");
         }
     }catch(string s){
-        printf("%s\n", s.c_str());
+        printf("Syntax Error: %s\n", s.c_str());
         endProgram = true;
     }
 }
@@ -137,21 +154,22 @@ void assignmentRule(){
         if(nextToken == ASSIGN_OP){
             lex();
             expressionRule();
-            var->value = evaluate(exprTokens); 
+            var->value = evaluate(exprTokens);
             while(!exprTokens.empty()){
                 printf("%s\n", exprTokens[0].c_str());
                 exprTokens.erase(exprTokens.begin());
             }
             //printf("Value is %s\n", var->value.c_str());
         }else{
-            throw string("Syntax Error: Expected = after identifier\n");
+            throw string("Expected = after identifier\n");
         }
 
         userVariables.push_back(var);
 
 
     }catch(string s){
-        printf("%s\n", s.c_str());
+        printf("Syntax Error: %s\n", s.c_str());
+        endProgram = true;
     }
 }
 
@@ -159,6 +177,94 @@ void assignmentRule(){
 void functionRule(){
     printf("Function rule entered\n");
 
+}
+
+void ifstmtRule(){
+    printf("If Stmt rule entered\n");
+    bool condition;
+    try{
+        lex();
+        if(nextToken == LEFT_PAREN){
+            lex();
+            condition = booleanExprRule();
+            if(condition){
+                printf("if resulted in true next lexeme is %s\n", lexeme.c_str());
+                lex();
+                if(nextToken == COLON){
+                    lex();
+                    if(nextToken == LINEBREAK){
+                        lex();
+                        if(nextToken == INDENT){
+                            lex();
+                            parse();
+                        }else{
+                            throw string("Expected statement block after 'if' call");
+                        }
+                    }else{
+                        throw string("Expected statement after 'if' call");
+                    }
+                }else{
+                    throw string("Expected ':' after 'if( )'");
+                }
+            }else{
+                printf("if resulted in false next lexeme is %s\n", lexeme.c_str());
+            }
+        }else{
+            throw string("Expected '(' after 'if' keyword");
+        }
+    }catch(string err){
+        printf("Syntax Error: %s\n", err.c_str());
+        endProgram = true;
+    }
+}
+
+bool booleanExprRule(){
+    string operand1, operand2;
+    expressionRule();
+    operand1 = evaluate(exprTokens);
+    printf("Bool expr: operand 1 is '%s'\n", operand1.c_str());
+    if(nextToken == COND_EQUAL){
+        lex();
+        expressionRule();
+        operand2 = evaluate(exprTokens);
+        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN){
+            return atoi(operand1.c_str()) == atoi(operand2.c_str());
+        }
+    }else if(nextToken == COND_GTEQ){
+        lex();
+        expressionRule();
+        operand2 = evaluate(exprTokens);
+        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN){
+            return atoi(operand1.c_str()) >= atoi(operand2.c_str());
+        }
+    }else if(nextToken == COND_GT){
+        lex();
+        expressionRule();
+        operand2 = evaluate(exprTokens);
+        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN){
+            return atoi(operand1.c_str()) > atoi(operand2.c_str());
+        }
+    }else if(nextToken == COND_LTEQ){
+        lex();
+        expressionRule();
+        operand2 = evaluate(exprTokens);
+        if(nextToken == RIGHT_PAREN){
+            return atoi(operand1.c_str()) <= atoi(operand2.c_str());
+        }
+    }else if(nextToken == COND_LT){
+        lex();
+        expressionRule();
+        operand2 = evaluate(exprTokens);
+        if(nextToken == RIGHT_PAREN){
+            return atoi(operand1.c_str()) < atoi(operand2.c_str());
+        }
+    }else{
+        throw string("Operator not found");
+        endProgram = true;
+    }
 }
 
 void expressionRule(){
@@ -173,7 +279,8 @@ void expressionRule(){
         }
 
     }catch(string s){
-        printf("%s\n", s.c_str());
+        printf("Syntax Error: %s\n", s.c_str());
+        endProgram = true;
     }
 }
 
@@ -210,11 +317,19 @@ void factorRule(){
             exprTokens.push_back(lexeme);
             lex();
         }else{
-            throw string("Syntax Error: No matching )");
+            throw string("No matching )");
+            endProgram = true;
         }
     }
 }
 
+/**
+ * Takes vector of expression tokens and pushes them into
+ * a stack 'pfStack' in the order of postfix.
+ * Then pushes to 'evaluateStack' to evaluate them. Returns
+ * the single element in the stack which will be the result of 
+ * the expression.
+ */
 string evaluate(std::vector<string> s){
     string postfix = "";
     std::stack<string> pfStack;
@@ -274,6 +389,9 @@ string evaluate(std::vector<string> s){
 
         }
     }
+    //Deallocate elements from vector containing expression factors for next use
+    exprTokens.clear();
+
     while(!pfStack.empty()){
         //postfix += pfStack.top();
         evaluateStack.push(pfStack.top());
@@ -296,10 +414,11 @@ string evaluate(std::vector<string> s){
     std::stack<string> results;
     while(!evaluateStack.empty()){
         if(op_prec(evaluateStack.top().c_str()) == 0){
-            results.push(evaluateStack.top());
+            if(!is_number(evaluateStack.top())) results.push(variableLookup(evaluateStack.top()));
+            else results.push(evaluateStack.top());
             evaluateStack.pop();
         }else{
-            printf("%s is an operator", evaluateStack.top().c_str());
+            printf("%s is an operator for evaluating", evaluateStack.top().c_str());
 
             operand1 = results.top(); results.pop();
             operand2 = results.top(); results.pop();

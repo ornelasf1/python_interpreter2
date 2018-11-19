@@ -6,20 +6,34 @@ using namespace std;
 
 void getChar(){
     if(inputFile.get(nextChar)){
-        if(isalpha(nextChar)){
+        cout << endl << "Retrieved '" << nextChar << "' from inputfile" << endl;
+        if(string_literal){
+            printf("SL_Char: %c\n", nextChar);
+            charClass = LETTER;
+            if(nextChar == '"'){
+                printf("Toggle string literal OFF\n");
+                string_literal = false;
+                charClass = OTHER;
+            }
+        }else if(isalpha(nextChar)){
             printf("Char: %c\n", nextChar);
             charClass = LETTER;
         }else if(isdigit(nextChar)){
             printf("Dig: %c\n", nextChar);
             charClass = DIGIT;
         }else{
-            if(nextChar != '\n') printf("Other: %c\n", nextChar);
-            else printf("Other: \\n\n");
+            if(nextChar == '\n') printf("Other: \\n\n"); 
+            else if(nextChar == ' ') printf("Other: space_char\n");
+            else printf("Other: %c\n", nextChar);
             charClass = OTHER;
             if(nextChar == '"'){
-                string_literal = !string_literal;
-                printf("Activate string literal\n");
+                string_literal = true;
+                printf("Toggle string literal ON\n");
             }
+            // if(string_literal && nextChar == ' '){
+            //     printf("Make space into letter class\n");
+            //     charClass = LETTER;
+            // }
         }
     }else{
         printf("EOF\n");
@@ -28,6 +42,7 @@ void getChar(){
     }
 }
 void lex(){
+    printf("Entering lex() with '%s'\n", lexeme.c_str());
     string oldLex = lexeme;
     lexeme = "";
     processSpaces();
@@ -53,7 +68,27 @@ void lex(){
         nextToken = INTEGER;
         break;
     case OTHER:
+        printf("Looking up '%c'\n", nextChar);
         lookup(nextChar);
+        if(nextToken == ASSIGN_OP){
+            getChar();
+            if(nextChar == '='){
+                nextToken = COND_EQUAL;
+                addChar();
+            }
+        }else if(nextToken == COND_LT){
+            getChar();
+            if(nextChar == '='){
+                nextToken = COND_LTEQ;
+                addChar();
+            }
+        }else if(nextToken == COND_GT){
+            getChar();
+            if(nextChar == '='){
+                nextToken = COND_GTEQ;
+                addChar();
+            }
+        }
         getChar();
         break;
     default:
@@ -62,21 +97,25 @@ void lex(){
     cout << oldLex << " -> " << lexeme << endl;
 
     if (lexeme == "\n"){
-        cout << "Found line break" << endl << endl;
+        cout << "Found lexeme linebreak '" << lexeme << "'" << endl << endl;
     }else if (lexeme == "\t"){
-        cout << "Found indent" << endl << endl;
+        cout << "Found lexeme indent '" << lexeme << "'" << endl << endl;
     }else{
-        cout << "Found " << lexeme << endl << endl;
+        cout << "Found lexeme '" << lexeme << "'" << endl << endl;
     }
     tokens.push_back(nextToken);
     lexemes.push_back(lexeme);
 }
 
 void processSpaces(){
+    if(nextChar == '\n') printf("Enter processSpaces() with 'line break'\n");
+    else printf("Enter processSpaces() with '%c'\n", nextChar);
     int spaces = indentCount;
+    if(nextChar == '\n') indent = true;
+    else if(!isspace(nextChar)) indent = false;
     while(isspace(nextChar) && nextChar != '\n' && !string_literal){
-        cout << spaces << endl;
-        if(--spaces == 0){
+        cout << spaces << " and " << (indent? "indent is true" : "indent is false") << endl;
+        if(indent && --spaces == 0){
             charClass = OTHER;
             nextChar = '\t';
             break;
@@ -90,6 +129,14 @@ void lookup(char c){
         case '=':
             addChar();
             nextToken = ASSIGN_OP;
+            break;
+        case '>':
+            addChar();
+            nextToken = COND_GT;
+            break;
+        case '<':
+            addChar();
+            nextToken = COND_LT;
             break;
         case '+':
             addChar();
@@ -148,5 +195,6 @@ void lookup(char c){
 
 void addChar(){
     if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') cout << "Add space" << endl;
+    else cout << "Added '" << nextChar << "' to lexeme" << endl;
     lexeme += nextChar;
 };

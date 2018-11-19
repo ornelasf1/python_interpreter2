@@ -14,6 +14,13 @@ enum TOKENS{
     MULT_OP,
     DIV_OP,
     ASSIGN_OP,
+    COND_EQUAL,
+    COND_GTEQ,
+    COND_GT,
+    COND_LTEQ,
+    COND_LT,
+    COND_AND,
+    COND_OR,
     LEFT_PAREN,
     RIGHT_PAREN,
     STRING_QUOTE,
@@ -42,6 +49,7 @@ extern std::vector<std::string> lexemes;
 extern int indentCount;
 extern bool endProgram;
 extern bool string_literal;
+extern bool indent;
 
 extern void getChar();
 extern void lex();
