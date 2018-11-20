@@ -1,3 +1,5 @@
-x = 1 + 2 
+x = 1 + 2
 if(x*4 >= 12):
-    print("IF came out as true")
+    x = 10
+    print("PRINT 1: ", x)
+print("PRINT 2: ", x)

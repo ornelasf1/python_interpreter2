@@ -111,8 +111,14 @@ void processSpaces(){
     if(nextChar == '\n') printf("Enter processSpaces() with 'line break'\n");
     else printf("Enter processSpaces() with '%c'\n", nextChar);
     int spaces = indentCount;
-    if(nextChar == '\n') indent = true;
-    else if(!isspace(nextChar)) indent = false;
+    if(nextChar == '\n') {
+        printf("Reset numOfIndets to 0 and turn ON indent mode\n");
+        numOfIndents = 0;
+        indent = true;
+    }else if(!isspace(nextChar)){
+        printf("Indent mode turned OFF\n");
+        indent = false;
+    }
     while(isspace(nextChar) && nextChar != '\n' && !string_literal){
         cout << spaces << " and " << (indent? "indent is true" : "indent is false") << endl;
         if(indent && --spaces == 0){

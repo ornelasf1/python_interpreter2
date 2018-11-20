@@ -50,6 +50,7 @@ extern int indentCount;
 extern bool endProgram;
 extern bool string_literal;
 extern bool indent;
+extern int numOfIndents;
 
 extern void getChar();
 extern void lex();

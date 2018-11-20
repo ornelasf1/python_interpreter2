@@ -51,11 +51,15 @@ string evaluate(std::vector<string>);
 
 //string evaluate(string opd1, const char* op, string opd2);
 string variableLookup(string var);
+void updateCurrentScope();
 bool is_number(const string&);
 
 const string reservedKeywords[] = {"print", "def", "if", "and", "or"};
 
-std::vector<Variable*> userVariables;
+//std::vector<Variable*> userVariables;
+//std::vector< std::vector<Scope*> > scopeOfScopes;
+std::vector<Scope*> scopes;
+Scope* currentScope = new Scope();
 
 void parse(){
     printf("Enter parse\nParsing '%s'\n", lexeme.c_str());
@@ -74,10 +78,29 @@ void parse(){
             assignmentRule();
         }
     }
+    if(nextToken == LINEBREAK){
+        printf("LINEBREAK ignored :(\n");
+    }
+    // if(nextToken == LINEBREAK){
+    //     printf("Line break in parse function\n");
+    //     lex();
+    //     while(nextToken == INDENT){
+    //         numOfIndents++;
+    //         lex();
+    //         printf("Hit INDENT, increase indent count: %i\n", numOfIndents);
+    //     }
+    // }
+    // }else if(nextToken == INDENT){
+    //     printf("Create new scope\n");
+    //     numOfIndents++;
+    //     currentScope->innerScope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
+    // }
 }
 
 void printRule(){
-    printf("Print rule entered\n");
+    printf("Print rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+
+    updateCurrentScope();
     string printString = "";
     try{
         lex();
@@ -121,6 +144,12 @@ void printRule(){
                         lex();
                         printf("%d\n", nextToken);
                         if (nextToken == LINEBREAK || nextToken == END){
+                            lex();
+                            while (nextToken == INDENT){
+                                numOfIndents++;
+                                printf("Hit INDENT after assignment line, increase indent count: %i\n", numOfIndents);
+                                lex();
+                            }
                             break;
                         }else{
                             throw string("Expected \\n after )");
@@ -139,11 +168,13 @@ void printRule(){
         printf("Syntax Error: %s\n", s.c_str());
         endProgram = true;
     }
+    printf("Print rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 
 void assignmentRule(){
-    printf("Assignment rule entered\n");
+    updateCurrentScope();
+    printf("Assignment rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     string variableName = lexeme;
     string stringValue = "";
     int exprValue;
@@ -155,22 +186,38 @@ void assignmentRule(){
             lex();
             expressionRule();
             var->value = evaluate(exprTokens);
-            while(!exprTokens.empty()){
-                printf("%s\n", exprTokens[0].c_str());
-                exprTokens.erase(exprTokens.begin());
+            // while(!exprTokens.empty()){
+            //     printf("%s\n", exprTokens[0].c_str());
+            //     exprTokens.erase(exprTokens.begin());
+            // }
+            exprTokens.clear();
+            if(nextToken == LINEBREAK){
+                if(currentScope->scopeLevel != 0){
+                    lex();
+                    while(nextToken == INDENT){
+                        numOfIndents++;
+                        printf("Hit INDENT after assignment line, increase indent count: %i\n", numOfIndents);
+                        lex();
+                    }
+                }
+            }else{
+                throw string("Error after assignment line");
             }
+
             //printf("Value is %s\n", var->value.c_str());
         }else{
-            throw string("Expected = after identifier\n");
+            throw string("Expected = after identifier");
         }
-
-        userVariables.push_back(var);
-
+        //userVariables.push_back(var);
+        currentScope->scopeVariables.push_back(var);
+        printf("Assign '%s' to '%s'\n", var->value.c_str(), var->name.c_str());
+        //Exits with LINEBREAK
 
     }catch(string s){
         printf("Syntax Error: %s\n", s.c_str());
         endProgram = true;
     }
+    printf("Assignment rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 
@@ -180,7 +227,8 @@ void functionRule(){
 }
 
 void ifstmtRule(){
-    printf("If Stmt rule entered\n");
+    printf("If Stmt rule entered with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    int indentsToIfStmt;
     bool condition;
     try{
         lex();
@@ -191,15 +239,40 @@ void ifstmtRule(){
                 printf("if resulted in true next lexeme is %s\n", lexeme.c_str());
                 lex();
                 if(nextToken == COLON){
+                    indentsToIfStmt = numOfIndents;
                     lex();
                     if(nextToken == LINEBREAK){
                         lex();
-                        if(nextToken == INDENT){
+                        //TOKENS prevTok;
+                        while(nextToken == INDENT){
+                            //prevTok = nextToken;
+                            numOfIndents++;
+                            printf("Hit INDENT in ifstmt, increase indent count: %i\n", numOfIndents);
                             lex();
-                            parse();
+                        }
+                        // if(prevTok == INDENT){
+                        if(numOfIndents == indentsToIfStmt + 1){
+                            printf("Creating new scope in 'if' call\n");
+                            Scope* if_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
+                            currentScope->innerScope = if_Scope;
+                            if_Scope->outerScope = currentScope;
+                            do{
+                                printf("IFSTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                parse();
+                            }while(numOfIndents == indentsToIfStmt + 1);
+                            printf("IFSTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                         }else{
                             throw string("Expected statement block after 'if' call");
                         }
+                        // if(nextToken == INDENT){
+                        //     numOfIndents++;
+                        //     printf("Create new scope in 'if' call\n");
+                        //     currentScope->innerScope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
+                        //     lex();
+                        //     parse();
+                        // }else{
+                        //     throw string("Expected statement block after 'if' call");
+                        // }
                     }else{
                         throw string("Expected statement after 'if' call");
                     }
@@ -216,6 +289,7 @@ void ifstmtRule(){
         printf("Syntax Error: %s\n", err.c_str());
         endProgram = true;
     }
+    printf("If Stmt rule exitted with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 bool booleanExprRule(){
@@ -277,7 +351,6 @@ void expressionRule(){
             lex();
             termRule();
         }
-
     }catch(string s){
         printf("Syntax Error: %s\n", s.c_str());
         endProgram = true;
@@ -447,13 +520,38 @@ string evaluate(std::vector<string> s){
 }
 
 string variableLookup(string var){
-    for(Variable* v : userVariables){
+    printf("Searching for variable %s in scope level %i\n", var.c_str(), currentScope->scopeLevel);
+    printf("Variables in scope level %i:\n", currentScope->scopeLevel);
+    for(Variable* v : currentScope->scopeVariables){
+        printf("Var: %s\n", v->name.c_str());
+    }
+    printf("\n");
+    string latestVarValue = "";;
+    for(Variable* v : currentScope->scopeVariables){
         if(v->name == var){
-            return v->value;
+            latestVarValue = v->value;
         }
     }
-    throw string("Variable '%s' is undefined\n", var.c_str());
+    if(latestVarValue != "") return latestVarValue;
+    else throw string("Variable '%s' is undefined\n", var.c_str());
     return "";
+}
+
+void updateCurrentScope(){
+    if(numOfIndents > currentScope->scopeLevel){
+        printf("%i > %i : Traverse into inner scope\n", numOfIndents, currentScope->scopeLevel);
+        while(numOfIndents > currentScope->scopeLevel && currentScope->innerScope != NULL){
+            currentScope = currentScope->innerScope;
+            printf("Entered inner scope with level %i\n", currentScope->scopeLevel);
+        }
+    }
+    else if(numOfIndents < currentScope->scopeLevel){
+        printf("%i < %i : Traverse into outer scope\n", numOfIndents, currentScope->scopeLevel);
+        while(numOfIndents < currentScope->scopeLevel && currentScope->outerScope != NULL){
+            currentScope = currentScope->outerScope;
+            printf("Entered outer scope with level %i\n", currentScope->scopeLevel);
+        }
+    }
 }
 
 bool is_number(const string& s){
@@ -474,4 +572,30 @@ Variable::Variable(string varName, string varValue){
 
 void Variable::setValue(string varValue){
     value = varValue;
+}
+
+//int Scope::scopeLevel = -1;
+
+Scope::Scope(){
+    this->scopeLevel = 0;
+    this->innerScope = NULL;
+    this->outerScope = NULL;
+}
+
+Scope::Scope(std::vector<Variable*> parentVars, int new_scopeL){
+    this->scopeLevel = new_scopeL + 1;
+    this->scopeVariables = parentVars;
+    this->innerScope = NULL;
+}
+
+void Scope::traverseToScope(int i){
+    // if(i > currentScope->scopeLevel){
+    //     while(i > currentScope->scopeLevel && currentScope->innerScope != NULL){
+    //         currentScope = currentScope->innerScope;
+    //     }
+    // }else if(i <= currentScope->scopeLevel){
+    //     while(i <= currentScope->scopeLevel && currentScope->innerScope != NULL){
+    //         currentScope = currentScope->outerScope;
+    //     }
+    // }
 }

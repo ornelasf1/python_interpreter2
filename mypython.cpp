@@ -20,6 +20,7 @@ int indentCount;
 bool endProgram;
 bool string_literal;
 bool indent;
+int numOfIndents;
 void getChar();
 void lex();
 void processSpaces();
@@ -58,6 +59,7 @@ string tksnames[] = {
 
 int main(int argc, char** argv){
     indentCount = 4;
+    numOfIndents = 0;
     endProgram = false;
     string_literal = false;
     indent = true;
@@ -67,14 +69,14 @@ int main(int argc, char** argv){
             filename = argv[1];
             string ext = filename.substr(filename.find("."), string::npos);
             if(ext != ".py"){
-                throw;
+                throw string("");
             }
             inputFile.open(filename.c_str());
         }else{
-            throw;
+            throw string("");
         }
-    }catch(...){
-        printf("Input: mypython <file.py>");
+    }catch(string s){
+        printf("Input: mypython <file.py>\n");
     }
 
 
