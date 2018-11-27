@@ -383,12 +383,13 @@ void ifstmtRule(){
     bool condition;
     try{
         lex();
-        if(nextToken == LEFT_PAREN){
-            lex();
+        if(nextToken == LEFT_PAREN || nextToken == IDENTIFIER || nextToken == INTEGER){
+            bool left_parenthesis = false;
+            if(nextToken == LEFT_PAREN){ lex(); left_parenthesis = true; }
             condition = booleanExprRule();
             if(condition){
                 printf("if resulted in TRUE next lexeme is %s\n", lexeme.c_str());
-                lex();
+                if(left_parenthesis) lex();
                 if(nextToken == COLON){
                     indentsToIfStmt = numOfIndents;
                     lex();
@@ -418,7 +419,7 @@ void ifstmtRule(){
                 }
             }else{
                 printf("if resulted in FALSE next lexeme is %s\n", lexeme.c_str());
-                lex();
+                if(left_parenthesis) lex();
                 if(nextToken == COLON){
                     indentsToIfStmt = numOfIndents;
                     lex();
