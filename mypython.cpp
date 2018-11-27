@@ -21,6 +21,8 @@ bool endProgram;
 bool string_literal;
 bool indent;
 int numOfIndents;
+bool codeBlockMode;
+string outputStream;
 void getChar();
 void lex();
 void processSpaces();
@@ -63,6 +65,8 @@ int main(int argc, char** argv){
     endProgram = false;
     string_literal = false;
     indent = true;
+    codeBlockMode = false;
+    outputStream = "";
     string filename;
     try{
         if(argc == 2){
@@ -82,9 +86,17 @@ int main(int argc, char** argv){
 
     if(inputFile.is_open()){
         getChar();
+        lex();
         do{
-            lex();
+            // if(true){
+            //     printf("CODEBLOCK_MODE OFF: lexing in main file\n");
+            //     lex();
+            // }else{
+            //     printf("CODEBLOCK_MODE ON: not lex'ing with token being '%s'\n", lexeme.c_str());
+            // }
+            printf("Token in MAIN file loop BEFORE parsing is '%s'\n", lexeme.c_str());
             parse();
+            printf("Token in MAIN file loop AFTER parsing is '%s'\n", lexeme.c_str());
             if(endProgram) break;
         }while(nextToken != END);
     }
@@ -104,6 +116,8 @@ int main(int argc, char** argv){
         cout << tksnames[tokens[i]] << " ";
     }
     cout << endl;
+
+    printf("\nPYTHON PROGRAM OUTPUT\n%s\n", outputStream.c_str());
 
     return 0;
 }

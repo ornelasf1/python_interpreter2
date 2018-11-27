@@ -15,6 +15,13 @@ class Variable{
     void setValue(std::string value);
     std::string name;
     std::string value;
+    bool isFunction;
+};
+
+class Function : public Variable{
+    public:
+    Function();
+    std::string printCalls;
 };
 
 class Scope{
@@ -23,8 +30,11 @@ class Scope{
     Scope(std::vector<Variable*>, int);
     Scope* innerScope;
     Scope* outerScope;
-    static void traverseToScope(int);
     std::vector<Variable*> scopeVariables;
+    Function* fetchFunction(std::string);
+    std::string actingFunctionName;
+    Scope* getFunctionScope();
+    bool functionMode;
     //static int scopeLevel;
     int scopeLevel;
 };

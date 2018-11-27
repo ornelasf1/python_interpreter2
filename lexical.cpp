@@ -37,8 +37,9 @@ void getChar(){
         }
     }else{
         printf("EOF\n");
+        nextChar = '\0';
         charClass = CHAR_END;
-        nextToken = END;
+        //nextToken = END;
     }
 }
 void lex(){
@@ -75,18 +76,32 @@ void lex(){
             if(nextChar == '='){
                 nextToken = COND_EQUAL;
                 addChar();
+            }else{
+                inputFile.putback(nextChar);
             }
         }else if(nextToken == COND_LT){
             getChar();
             if(nextChar == '='){
                 nextToken = COND_LTEQ;
                 addChar();
+            }else{
+                inputFile.putback(nextChar);
             }
         }else if(nextToken == COND_GT){
             getChar();
             if(nextChar == '='){
                 nextToken = COND_GTEQ;
                 addChar();
+            }else{
+                inputFile.putback(nextChar);
+            }
+        }else if(nextToken == COND_NOT_OP){
+            getChar();
+            if(nextChar == '='){
+                nextToken = COND_NOT_OP;
+                addChar();
+            }else{
+                inputFile.putback(nextChar);
             }
         }
         getChar();
@@ -94,6 +109,7 @@ void lex(){
     default:
         nextToken = END;
     }
+    printf("Resulted in TOKEN: %i\n", nextToken);
     cout << oldLex << " -> " << lexeme << endl;
 
     if (lexeme == "\n"){
@@ -143,6 +159,10 @@ void lookup(char c){
         case '<':
             addChar();
             nextToken = COND_LT;
+            break;
+        case '!':
+            addChar();
+            nextToken = COND_NOT_OP;
             break;
         case '+':
             addChar();

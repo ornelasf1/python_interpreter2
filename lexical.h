@@ -19,6 +19,7 @@ enum TOKENS{
     COND_GT,
     COND_LTEQ,
     COND_LT,
+    COND_NOT_OP,
     COND_AND,
     COND_OR,
     LEFT_PAREN,
@@ -51,6 +52,8 @@ extern bool endProgram;
 extern bool string_literal;
 extern bool indent;
 extern int numOfIndents;
+extern bool codeBlockMode;
+extern std::string outputStream;
 
 extern void getChar();
 extern void lex();
