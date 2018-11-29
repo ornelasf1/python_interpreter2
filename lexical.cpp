@@ -6,44 +6,45 @@ using namespace std;
 
 void getChar(){
     if(inputFile.get(nextChar)){
-        cout << endl << "Retrieved '" << nextChar << "' from inputfile" << endl;
+        //cout << endl << "Retrieved '" << nextChar << "' from inputfile" << endl;
+        log("\nRetrieved '%c' from inputfile\n", nextChar);
         if(string_literal){
-            printf("SL_Char: %c\n", nextChar);
+            log("SL_Char: %c\n", nextChar);
             charClass = LETTER;
             if(nextChar == '"'){
-                printf("Toggle string literal OFF\n");
+                log("Toggle string literal OFF\n");
                 string_literal = false;
                 charClass = OTHER;
             }
         }else if(isalpha(nextChar)){
-            printf("Char: %c\n", nextChar);
+            log("Char: %c\n", nextChar);
             charClass = LETTER;
         }else if(isdigit(nextChar)){
-            printf("Dig: %c\n", nextChar);
+            log("Dig: %c\n", nextChar);
             charClass = DIGIT;
         }else{
-            if(nextChar == '\n') printf("Other: \\n\n"); 
-            else if(nextChar == ' ') printf("Other: space_char\n");
-            else printf("Other: %c\n", nextChar);
+            if(nextChar == '\n') log("Other: \\n\n"); 
+            else if(nextChar == ' ') log("Other: space_char\n");
+            else log("Other: %c\n", nextChar);
             charClass = OTHER;
             if(nextChar == '"'){
                 string_literal = true;
-                printf("Toggle string literal ON\n");
+                log("Toggle string literal ON\n");
             }
             // if(string_literal && nextChar == ' '){
-            //     printf("Make space into letter class\n");
+            //     log("Make space into letter class\n");
             //     charClass = LETTER;
             // }
         }
     }else{
-        printf("EOF\n");
+        log("EOF\n");
         nextChar = '\0';
         charClass = CHAR_END;
         //nextToken = END;
     }
 }
 void lex(){
-    printf("Entering lex() with '%s'\n", lexeme.c_str());
+    log("Entering lex() with '%s'\n", lexeme.c_str());
     string oldLex = lexeme;
     lexeme = "";
     processSpaces();
@@ -69,7 +70,7 @@ void lex(){
         nextToken = INTEGER;
         break;
     case OTHER:
-        printf("Looking up '%c'\n", nextChar);
+        log("Looking up '%c'\n", nextChar);
         lookup(nextChar);
         if(nextToken == ASSIGN_OP){
             getChar();
@@ -107,42 +108,49 @@ void lex(){
         getChar();
         break;
     default:
+        log("WE END\n");
         nextToken = END;
+        break;
     }
-    printf("Resulted in TOKEN: %i\n", nextToken);
-    cout << oldLex << " -> " << lexeme << endl;
+    log("Resulted in TOKEN: %i\n", nextToken);
+    log("%s -> %s\n", oldLex.c_str(), lexeme.c_str());
 
     if (lexeme == "\n"){
-        cout << "Found lexeme linebreak '" << lexeme << "'" << endl << endl;
+        log("Found lexeme linebreak '%s'\n", lexeme.c_str());
+        //cout << "Found lexeme linebreak '" << lexeme << "'" << endl << endl;
     }else if (lexeme == "\t"){
-        cout << "Found lexeme indent '" << lexeme << "'" << endl << endl;
+        log("Found lexeme indent '%s'\n", lexeme.c_str());
+        //cout << "Found lexeme indent '" << lexeme << "'" << endl << endl;
     }else{
-        cout << "Found lexeme '" << lexeme << "'" << endl << endl;
+        log("Found lexeme '%s'\n", lexeme.c_str());
+        //cout << "Found lexeme '" << lexeme << "'" << endl << endl;
     }
     tokens.push_back(nextToken);
     lexemes.push_back(lexeme);
 }
 
 void processSpaces(){
-    if(nextChar == '\n') printf("Enter processSpaces() with 'line break'\n");
-    else printf("Enter processSpaces() with '%c'\n", nextChar);
+    if(nextChar == '\n') log("Enter processSpaces() with 'line break'\n");
+    else log("Enter processSpaces() with '%c'\n", nextChar);
     int spaces = indentCount;
     if(nextChar == '\n') {
-        printf("Reset numOfIndets to 0 and turn ON indent mode\n");
+        log("Reset numOfIndets to 0 and turn ON indent mode\n");
         numOfIndents = 0;
         indent = true;
     }else if(!isspace(nextChar)){
-        printf("Indent mode turned OFF\n");
+        log("Indent mode turned OFF\n");
         indent = false;
     }
     while(isspace(nextChar) && nextChar != '\n' && !string_literal){
-        cout << spaces << " and " << (indent? "indent is true" : "indent is false") << endl;
+        string msg = (indent)? "indent is true" : "indent is false";
+        log("%i and %s\n", spaces, msg.c_str());
+        //cout << spaces << " and " << (indent? "indent is true" : "indent is false") << endl;
         if(indent && --spaces == 0){
             charClass = OTHER;
             nextChar = '\t';
             break;
         }
-        printf("Skip whitespace\n");
+        log("Skip whitespace\n");
         getChar();
     }
 }
@@ -211,16 +219,18 @@ void lookup(char c){
         case '\n':
             addChar();
             nextToken = LINEBREAK;
+            lineNumber++;
             break;
         default:
             nextToken = END;
+            log("WE END\n");
             break;
 
     }
 }
 
 void addChar(){
-    if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') cout << "Add space" << endl;
-    else cout << "Added '" << nextChar << "' to lexeme" << endl;
+    if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') log("Add space\n");//cout << "Add space" << endl;
+    else log("Added '%c' to lexeme\n", nextChar);//cout << "Added '" << nextChar << "' to lexeme" << endl;
     lexeme += nextChar;
 };

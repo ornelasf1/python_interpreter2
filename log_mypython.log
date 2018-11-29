@@ -1,0 +1,2051 @@
+
+Retrieved 'p' from inputfile
+Char: p
+Entering lex() with ''
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+ -> print
+Found lexeme 'print'
+Token in MAIN file loop BEFORE parsing is 'print'
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 0
+Print rule entered with scope level 0 and with token 'print'
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 'h' from inputfile
+SL_Char: h
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 'h'
+Indent mode turned OFF
+Added 'h' to lexeme
+
+Retrieved 'e' from inputfile
+SL_Char: e
+Added 'e' to lexeme
+
+Retrieved 'l' from inputfile
+SL_Char: l
+Added 'l' to lexeme
+
+Retrieved 'l' from inputfile
+SL_Char: l
+Added 'l' to lexeme
+
+Retrieved 'o' from inputfile
+SL_Char: o
+Added 'o' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> hello
+Found lexeme 'hello'
+Entering lex() with 'hello'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+hello -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: hello
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'x' from inputfile
+Char: x
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with 'x'
+Indent mode turned OFF
+Added 'x' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+
+ -> x
+Found lexeme 'x'
+OUTPUT: hello
+Print rule exitting with scope level 0 and with token 'x'
+Token in MAIN file loop AFTER parsing is 'x'
+Token in MAIN file loop BEFORE parsing is 'x'
+Enter parse
+Parsing 'x'
+Entering lex() with 'x'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '=' from inputfile
+Other: =
+Looking up '='
+Added '=' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 7
+x -> =
+Found lexeme '='
+Producing Assignment Rule with lexeme '=' and scope level 0
+Assignment rule entered with scope level 0 and with token '='
+Entering lex() with '='
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '3' from inputfile
+Dig: 3
+Added '3' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 1
+= -> 3
+Found lexeme '3'
+Expression rule entered with '3'
+Term rule entered with '3'
+Factor rule entered with '3'
+Entering lex() with '3'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 23
+3 -> 
+
+Found lexeme linebreak '
+'
+3 is not an operator
+Result is 3
+Entering lex() with '
+'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+
+ -> print
+Found lexeme 'print'
+Assign '3' to 'x'
+Assignment rule exitting with scope level 0 and with token 'print'
+Token in MAIN file loop AFTER parsing is 'print'
+Token in MAIN file loop BEFORE parsing is 'print'
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 0
+Print rule entered with scope level 0 and with token 'print'
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 't'
+Indent mode turned OFF
+Added 't' to lexeme
+
+Retrieved 'h' from inputfile
+SL_Char: h
+Added 'h' to lexeme
+
+Retrieved 'i' from inputfile
+SL_Char: i
+Added 'i' to lexeme
+
+Retrieved 's' from inputfile
+SL_Char: s
+Added 's' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> this
+Found lexeme 'this'
+Entering lex() with 'this'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+this -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: this
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with 'i'
+Indent mode turned OFF
+Added 'i' to lexeme
+
+Retrieved 'f' from inputfile
+Char: f
+Added 'f' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+
+ -> if
+Found lexeme 'if'
+OUTPUT: this
+Print rule exitting with scope level 0 and with token 'if'
+Token in MAIN file loop AFTER parsing is 'if'
+Token in MAIN file loop BEFORE parsing is 'if'
+Enter parse
+Parsing 'if'
+Producing IfStmt Rule with lexeme 'if' and scope level 0
+If Stmt rule entered with scope level 0 and token 'if'
+Entering lex() with 'if'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved 'x' from inputfile
+Char: x
+Added 'x' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+if -> x
+Found lexeme 'x'
+Expression rule entered with 'x'
+Term rule entered with 'x'
+Factor rule entered with 'x'
+Entering lex() with 'x'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '=' from inputfile
+Other: =
+Looking up '='
+Added '=' to lexeme
+
+Retrieved '=' from inputfile
+Other: =
+Added '=' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 8
+x -> ==
+Found lexeme '=='
+x is not an operator
+Searching for variable x in scope level 0
+Variables in scope level 0:
+Var: x
+
+Searching for function x
+Variable x IS NOT a function
+Result is 3
+Bool expr: operand 1 is '3'
+Entering lex() with '=='
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '2' from inputfile
+Dig: 2
+Added '2' to lexeme
+
+Retrieved ':' from inputfile
+Other: :
+Resulted in TOKEN: 1
+== -> 2
+Found lexeme '2'
+Expression rule entered with '2'
+Term rule entered with '2'
+Factor rule entered with '2'
+Entering lex() with '2'
+Enter processSpaces() with ':'
+Indent mode turned OFF
+Looking up ':'
+Added ':' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 20
+2 -> :
+Found lexeme ':'
+2 is not an operator
+Result is 2
+Bool expr: operand 2 is '2'
+Compare 3 equivalence to 2
+if resulted in FALSE next lexeme is :
+Entering lex() with ':'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+: -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> print
+Found lexeme 'print'
+FALSE: Not Creating new scope in 'if' call
+IFSTMT FALSE: Looping with print and with scope level 0
+IFSTMT FALSE: lex is print : Skipping code block statements
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+IFSTMT FALSE: lex is ( : Skipping code block statements
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 'i' from inputfile
+SL_Char: i
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+IFSTMT FALSE: lex is " : Skipping code block statements
+Entering lex() with '"'
+Enter processSpaces() with 'i'
+Indent mode turned OFF
+Added 'i' to lexeme
+
+Retrieved 's' from inputfile
+SL_Char: s
+Added 's' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'n' from inputfile
+SL_Char: n
+Added 'n' to lexeme
+
+Retrieved 'o' from inputfile
+SL_Char: o
+Added 'o' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Added 't' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> is not
+Found lexeme 'is not'
+IFSTMT FALSE: lex is is not : Skipping code block statements
+Entering lex() with 'is not'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+is not -> "
+Found lexeme '"'
+IFSTMT FALSE: lex is " : Skipping code block statements
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+IFSTMT FALSE: lex is ) : Skipping code block statements
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with 'e'
+Indent mode turned OFF
+Added 'e' to lexeme
+
+Retrieved 'l' from inputfile
+Char: l
+Added 'l' to lexeme
+
+Retrieved 's' from inputfile
+Char: s
+Added 's' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Added 'e' to lexeme
+
+Retrieved ':' from inputfile
+Other: :
+Resulted in TOKEN: 0
+
+ -> else
+Found lexeme 'else'
+Entering lex() with 'else'
+Enter processSpaces() with ':'
+Indent mode turned OFF
+Looking up ':'
+Added ':' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 20
+else -> :
+Found lexeme ':'
+Entering lex() with ':'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+: -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> print
+Found lexeme 'print'
+Creating new scope in 'else' call
+ELSESTMT: Looping with print and with scope level 0
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 0
+Print rule entered with scope level 0 and with token 'print'
+1 > 0 : Traverse into inner scope
+Entered inner scope with level 1
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 'i' from inputfile
+SL_Char: i
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 'i'
+Indent mode turned OFF
+Added 'i' to lexeme
+
+Retrieved 's' from inputfile
+SL_Char: s
+Added 's' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> is
+Found lexeme 'is'
+Entering lex() with 'is'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+is -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: is
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'i'
+Indent mode turned OFF
+Added 'i' to lexeme
+
+Retrieved 'f' from inputfile
+Char: f
+Added 'f' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> if
+Found lexeme 'if'
+OUTPUT: is
+Current Scope(1) Not in function mode
+Traverse to outer scope with level 0
+Print rule exitting with scope level 1 and with token 'if'
+ELSESTMT: Looping with if and with scope level 1
+Enter parse
+Parsing 'if'
+Producing IfStmt Rule with lexeme 'if' and scope level 1
+If Stmt rule entered with scope level 1 and token 'if'
+Entering lex() with 'if'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved 'x' from inputfile
+Char: x
+Resulted in TOKEN: 16
+if -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with 'x'
+Indent mode turned OFF
+Added 'x' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+( -> x
+Found lexeme 'x'
+Expression rule entered with 'x'
+Term rule entered with 'x'
+Factor rule entered with 'x'
+Entering lex() with 'x'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '=' from inputfile
+Other: =
+Looking up '='
+Added '=' to lexeme
+
+Retrieved '=' from inputfile
+Other: =
+Added '=' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 8
+x -> ==
+Found lexeme '=='
+x is not an operator
+Searching for variable x in scope level 1
+Variables in scope level 1:
+Var: x
+
+Searching for function x
+Variable x IS NOT a function
+Result is 3
+Bool expr: operand 1 is '3'
+Entering lex() with '=='
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '3' from inputfile
+Dig: 3
+Added '3' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 1
+== -> 3
+Found lexeme '3'
+Expression rule entered with '3'
+Term rule entered with '3'
+Factor rule entered with '3'
+Entering lex() with '3'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved ':' from inputfile
+Other: :
+Resulted in TOKEN: 17
+3 -> )
+Found lexeme ')'
+3 is not an operator
+Result is 3
+Bool expr: operand 2 is '3'
+Compare 3 equivalence to 3
+if resulted in TRUE next lexeme is )
+Entering lex() with ')'
+Enter processSpaces() with ':'
+Indent mode turned OFF
+Looking up ':'
+Added ':' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 20
+) -> :
+Found lexeme ':'
+Entering lex() with ':'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+: -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 22
+	 -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 2
+Entering lex() with '	'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> print
+Found lexeme 'print'
+Creating new scope in 'if' call
+IFSTMT: Looping with print and with scope level 1
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 1
+Print rule entered with scope level 1 and with token 'print'
+2 > 1 : Traverse into inner scope
+Entered inner scope with level 2
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 't'
+Indent mode turned OFF
+Added 't' to lexeme
+
+Retrieved 'h' from inputfile
+SL_Char: h
+Added 'h' to lexeme
+
+Retrieved 'e' from inputfile
+SL_Char: e
+Added 'e' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'v' from inputfile
+SL_Char: v
+Added 'v' to lexeme
+
+Retrieved 'a' from inputfile
+SL_Char: a
+Added 'a' to lexeme
+
+Retrieved 'l' from inputfile
+SL_Char: l
+Added 'l' to lexeme
+
+Retrieved 'u' from inputfile
+SL_Char: u
+Added 'u' to lexeme
+
+Retrieved 'e' from inputfile
+SL_Char: e
+Added 'e' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> the value
+Found lexeme 'the value'
+Entering lex() with 'the value'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+the value -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: the value
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'e'
+Indent mode turned OFF
+Added 'e' to lexeme
+
+Retrieved 'l' from inputfile
+Char: l
+Added 'l' to lexeme
+
+Retrieved 's' from inputfile
+Char: s
+Added 's' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Added 'e' to lexeme
+
+Retrieved ':' from inputfile
+Other: :
+Resulted in TOKEN: 0
+	 -> else
+Found lexeme 'else'
+OUTPUT: the value
+Current Scope(2) Not in function mode
+Traverse to outer scope with level 1
+Current Scope(1) Not in function mode
+Traverse to outer scope with level 0
+Print rule exitting with scope level 2 and with token 'else'
+IFSTMT: EXITTING loop with else and with scope level 2
+TRUE: Skipping else code block
+IFSTMT TRUE SKIP ELSE: Looping with else and with scope level 2
+IFSTMT TRUE SKIP ELSE: lex is else : Skipping code block statements
+Entering lex() with 'else'
+Enter processSpaces() with ':'
+Indent mode turned OFF
+Looking up ':'
+Added ':' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 20
+else -> :
+Found lexeme ':'
+IFSTMT TRUE SKIP ELSE: lex is : : Skipping code block statements
+Entering lex() with ':'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+: -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 22
+	 -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 2
+Entering lex() with '	'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> print
+Found lexeme 'print'
+IFSTMT TRUE SKIP ELSE: Looping with print and with scope level 2
+IFSTMT TRUE SKIP ELSE: lex is print : Skipping code block statements
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+IFSTMT TRUE SKIP ELSE: lex is ( : Skipping code block statements
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+IFSTMT TRUE SKIP ELSE: lex is " : Skipping code block statements
+Entering lex() with '"'
+Enter processSpaces() with 't'
+Indent mode turned OFF
+Added 't' to lexeme
+
+Retrieved 'h' from inputfile
+SL_Char: h
+Added 'h' to lexeme
+
+Retrieved 'e' from inputfile
+SL_Char: e
+Added 'e' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'n' from inputfile
+SL_Char: n
+Added 'n' to lexeme
+
+Retrieved 'o' from inputfile
+SL_Char: o
+Added 'o' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Added 't' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'v' from inputfile
+SL_Char: v
+Added 'v' to lexeme
+
+Retrieved 'a' from inputfile
+SL_Char: a
+Added 'a' to lexeme
+
+Retrieved 'l' from inputfile
+SL_Char: l
+Added 'l' to lexeme
+
+Retrieved 'u' from inputfile
+SL_Char: u
+Added 'u' to lexeme
+
+Retrieved 'e' from inputfile
+SL_Char: e
+Added 'e' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> the not value
+Found lexeme 'the not value'
+IFSTMT TRUE SKIP ELSE: lex is the not value : Skipping code block statements
+Entering lex() with 'the not value'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+the not value -> "
+Found lexeme '"'
+IFSTMT TRUE SKIP ELSE: lex is " : Skipping code block statements
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+IFSTMT TRUE SKIP ELSE: lex is ) : Skipping code block statements
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+	 -> print
+Found lexeme 'print'
+If Stmt rule exitted with scope level 2 and token 'print'
+ELSESTMT: Looping with print and with scope level 2
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 2
+Print rule entered with scope level 2 and with token 'print'
+1 < 2 : Traverse into outer scope
+Entered outer scope with level 1
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 'a' from inputfile
+SL_Char: a
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 'a'
+Indent mode turned OFF
+Added 'a' to lexeme
+
+Retrieved 'n' from inputfile
+SL_Char: n
+Added 'n' to lexeme
+
+Retrieved 'd' from inputfile
+SL_Char: d
+Added 'd' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> and
+Found lexeme 'and'
+Entering lex() with 'and'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+and -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: and
+Entering lex() with ')'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 23
+) -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'd' from inputfile
+Char: d
+Resulted in TOKEN: 23
+
+ -> 
+
+Found lexeme linebreak '
+'
+OUTPUT: and
+Current Scope(1) Not in function mode
+Traverse to outer scope with level 0
+Print rule exitting with scope level 1 and with token '
+'
+ELSESTMT: Looping with 
+ and with scope level 1
+Enter parse
+Parsing '
+'
+LINEBREAK ignored :(
+Entering lex() with '
+'
+Enter processSpaces() with 'd'
+Indent mode turned OFF
+Added 'd' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Added 'e' to lexeme
+
+Retrieved 'f' from inputfile
+Char: f
+Added 'f' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+
+ -> def
+Found lexeme 'def'
+ELSESTMT: EXITTING loop with def and with scope level 1
+IFSTMT FALSE: EXITTING loop with def and with scope level 1
+If Stmt rule exitted with scope level 1 and token 'def'
+Token in MAIN file loop AFTER parsing is 'def'
+Token in MAIN file loop BEFORE parsing is 'def'
+Enter parse
+Parsing 'def'
+Producing Function Rule with lexeme 'def' and scope level 1
+0 < 1 : Traverse into outer scope
+Entered outer scope with level 0
+Function rule entered
+Entering lex() with 'def'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved 'e' from inputfile
+Char: e
+Added 'e' to lexeme
+
+Retrieved 's' from inputfile
+Char: s
+Added 's' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+def -> test
+Found lexeme 'test'
+Entering lex() with 'test'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 16
+test -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+
+Retrieved ':' from inputfile
+Other: :
+Resulted in TOKEN: 17
+( -> )
+Found lexeme ')'
+Entering lex() with ')'
+Enter processSpaces() with ':'
+Indent mode turned OFF
+Looking up ':'
+Added ':' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 20
+) -> :
+Found lexeme ':'
+Entering lex() with ':'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+: -> 
+
+Found lexeme linebreak '
+'
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved 'x' from inputfile
+Char: x
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'x'
+Indent mode turned OFF
+Added 'x' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 0
+	 -> x
+Found lexeme 'x'
+Creating new scope in 'def' call
+1 > 0 : Traverse into inner scope
+Entered inner scope with level 1
+DEF_FUNC: Looping with x and with scope level 1
+Enter parse
+Parsing 'x'
+Entering lex() with 'x'
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '=' from inputfile
+Other: =
+Looking up '='
+Added '=' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 7
+x -> =
+Found lexeme '='
+Producing Assignment Rule with lexeme '=' and scope level 1
+Assignment rule entered with scope level 1 and with token '='
+Entering lex() with '='
+Enter processSpaces() with ' '
+4 and indent is false
+Skip whitespace
+
+Retrieved '2' from inputfile
+Dig: 2
+Added '2' to lexeme
+
+Retrieved '3' from inputfile
+Dig: 3
+Added '3' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 1
+= -> 23
+Found lexeme '23'
+Expression rule entered with '23'
+Term rule entered with '23'
+Factor rule entered with '23'
+Entering lex() with '23'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved ' ' from inputfile
+Other: space_char
+Resulted in TOKEN: 23
+23 -> 
+
+Found lexeme linebreak '
+'
+23 is not an operator
+Result is 23
+Entering lex() with '
+'
+Enter processSpaces() with ' '
+4 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+3 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+2 and indent is true
+Skip whitespace
+
+Retrieved ' ' from inputfile
+Other: space_char
+1 and indent is true
+Looking up '	'
+Added '	' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 22
+
+ -> 	
+Found lexeme indent '	'
+Hit INDENT, increase indent count: 1
+Entering lex() with '	'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved '
+' from inputfile
+Other: \n
+Resulted in TOKEN: 23
+	 -> 
+
+Found lexeme linebreak '
+'
+Assign '23' to 'x'
+Assignment rule exitting with scope level 1 and with token '
+'
+DEF_FUNC: Back to function loop with '
+' and no. of indents: '0'
+DEF_FUNC: Looping with 
+ and with scope level 1
+Enter parse
+Parsing '
+'
+LINEBREAK ignored :(
+Entering lex() with '
+'
+Enter processSpaces() with 'line break'
+Reset numOfIndets to 0 and turn ON indent mode
+Looking up '
+'
+Added '
+' to lexeme
+
+Retrieved 'p' from inputfile
+Char: p
+Resulted in TOKEN: 23
+
+ -> 
+
+Found lexeme linebreak '
+'
+DEF_FUNC: Back to function loop with '
+' and no. of indents: '0'
+DEF_FUNC: Looping with 
+ and with scope level 1
+Enter parse
+Parsing '
+'
+LINEBREAK ignored :(
+Entering lex() with '
+'
+Enter processSpaces() with 'p'
+Indent mode turned OFF
+Added 'p' to lexeme
+
+Retrieved 'r' from inputfile
+Char: r
+Added 'r' to lexeme
+
+Retrieved 'i' from inputfile
+Char: i
+Added 'i' to lexeme
+
+Retrieved 'n' from inputfile
+Char: n
+Added 'n' to lexeme
+
+Retrieved 't' from inputfile
+Char: t
+Added 't' to lexeme
+
+Retrieved '(' from inputfile
+Other: (
+Resulted in TOKEN: 0
+
+ -> print
+Found lexeme 'print'
+DEF_FUNC: Back to function loop with 'print' and no. of indents: '0'
+DEF_FUNC: EXITTING loop with print and with scope level 1
+Token in MAIN file loop AFTER parsing is 'print'
+Token in MAIN file loop BEFORE parsing is 'print'
+Enter parse
+Parsing 'print'
+Producing Print Rule with lexeme 'print' and scope level 1
+Print rule entered with scope level 1 and with token 'print'
+0 < 1 : Traverse into outer scope
+Entered outer scope with level 0
+Entering lex() with 'print'
+Enter processSpaces() with '('
+Indent mode turned OFF
+Looking up '('
+Added '(' to lexeme
+
+Retrieved '"' from inputfile
+Other: "
+Toggle string literal ON
+Resulted in TOKEN: 16
+print -> (
+Found lexeme '('
+Entering lex() with '('
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Resulted in TOKEN: 18
+( -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with 't'
+Indent mode turned OFF
+Added 't' to lexeme
+
+Retrieved 'h' from inputfile
+SL_Char: h
+Added 'h' to lexeme
+
+Retrieved 'a' from inputfile
+SL_Char: a
+Added 'a' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Added 't' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'i' from inputfile
+SL_Char: i
+Added 'i' to lexeme
+
+Retrieved 's' from inputfile
+SL_Char: s
+Added 's' to lexeme
+
+Retrieved ' ' from inputfile
+SL_Char:  
+Add space
+
+Retrieved 'i' from inputfile
+SL_Char: i
+Added 'i' to lexeme
+
+Retrieved 't' from inputfile
+SL_Char: t
+Added 't' to lexeme
+
+Retrieved '"' from inputfile
+SL_Char: "
+Toggle string literal OFF
+Resulted in TOKEN: 2
+" -> that is it
+Found lexeme 'that is it'
+Entering lex() with 'that is it'
+Enter processSpaces() with '"'
+Indent mode turned OFF
+Looking up '"'
+Added '"' to lexeme
+
+Retrieved ')' from inputfile
+Other: )
+Resulted in TOKEN: 18
+that is it -> "
+Found lexeme '"'
+Entering lex() with '"'
+Enter processSpaces() with ')'
+Indent mode turned OFF
+Looking up ')'
+Added ')' to lexeme
+EOF
+Resulted in TOKEN: 17
+" -> )
+Found lexeme ')'
+print works str: that is it
+Entering lex() with ')'
+Enter processSpaces() with 'Indent mode turned OFF
+WE END
+Resulted in TOKEN: 24
+) -> 
+Found lexeme ''
+Entering lex() with ''
+Enter processSpaces() with 'Indent mode turned OFF
+WE END
+Resulted in TOKEN: 24
+ -> 
+Found lexeme ''
+OUTPUT: that is it
+Print rule exitting with scope level 0 and with token ''
+Token in MAIN file loop AFTER parsing is ''
+PRINTING LEXEMES
+print ( " hello " ) linebreak x = 3 linebreak print ( " this " ) linebreak if x == 2 : linebreak indent print ( " is not " ) linebreak else : linebreak indent print ( " is " ) linebreak indent if ( x == 3 ) : linebreak indent indent print ( " the value " ) linebreak indent else : linebreak indent indent print ( " the not value " ) linebreak indent print ( " and " ) linebreak linebreak def test ( ) : linebreak indent x = 23 linebreak indent linebreak linebreak print ( " that is it " )   
+PRINTING TOKENS
+IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK IDENTIFIER ASSIGN_OP INTEGER LINEBREAK IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK IDENTIFIER IDENTIFIER COND_EQUAL INTEGER COLON LINEBREAK INDENT IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK IDENTIFIER COLON LINEBREAK INDENT IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK INDENT IDENTIFIER LEFT_PAREN IDENTIFIER COND_EQUAL INTEGER RIGHT_PAREN COLON LINEBREAK INDENT INDENT IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK INDENT IDENTIFIER COLON LINEBREAK INDENT INDENT IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK INDENT IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN LINEBREAK LINEBREAK IDENTIFIER IDENTIFIER LEFT_PAREN RIGHT_PAREN COLON LINEBREAK INDENT IDENTIFIER ASSIGN_OP INTEGER LINEBREAK INDENT LINEBREAK LINEBREAK IDENTIFIER LEFT_PAREN STRING_QUOTE STRING_LITERAL STRING_QUOTE RIGHT_PAREN END END 

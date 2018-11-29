@@ -52,7 +52,7 @@ extern bool endProgram;
 extern bool string_literal;
 extern bool indent;
 extern int numOfIndents;
-extern bool codeBlockMode;
+extern int lineNumber;
 extern std::string outputStream;
 
 extern void getChar();
@@ -60,6 +60,8 @@ extern void lex();
 extern void processSpaces();
 extern void lookup(char);
 extern void addChar();
+
+extern void log(const char*, ...);
 
 #endif
 

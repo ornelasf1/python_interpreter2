@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -21,7 +23,7 @@ bool endProgram;
 bool string_literal;
 bool indent;
 int numOfIndents;
-bool codeBlockMode;
+int lineNumber;
 string outputStream;
 void getChar();
 void lex();
@@ -30,6 +32,10 @@ void lookup(char);
 void addChar();
 
 void parse();
+
+void log();
+ofstream logFile;
+
 
 string tksnames[] = {
     "IDENTIFIER",
@@ -45,6 +51,7 @@ string tksnames[] = {
     "COND_GT",
     "COND_LTEQ",
     "COND_LT",
+    "COND_NOT_OP",
     "COND_AND",
     "COND_OR",
     "LEFT_PAREN",
@@ -60,14 +67,15 @@ string tksnames[] = {
 
 
 int main(int argc, char** argv){
+    lineNumber = 1;
     indentCount = 4;
     numOfIndents = 0;
     endProgram = false;
     string_literal = false;
     indent = true;
-    codeBlockMode = false;
     outputStream = "";
     string filename;
+    logFile.open("log_mypython.log");
     try{
         if(argc == 2){
             filename = argv[1];
@@ -88,36 +96,46 @@ int main(int argc, char** argv){
         getChar();
         lex();
         do{
-            // if(true){
-            //     printf("CODEBLOCK_MODE OFF: lexing in main file\n");
-            //     lex();
-            // }else{
-            //     printf("CODEBLOCK_MODE ON: not lex'ing with token being '%s'\n", lexeme.c_str());
-            // }
-            printf("Token in MAIN file loop BEFORE parsing is '%s'\n", lexeme.c_str());
+            log("Token in MAIN file loop BEFORE parsing is '%s'\n", lexeme.c_str());
             parse();
-            printf("Token in MAIN file loop AFTER parsing is '%s'\n", lexeme.c_str());
+            log("Token in MAIN file loop AFTER parsing is '%s'\n", lexeme.c_str());
             if(endProgram) break;
         }while(nextToken != END);
     }
 
     inputFile.close();
 
-    printf("PRINTING LEXEMES\n");
+    log("PRINTING LEXEMES\n");
     for(int i = 0; i < lexemes.size(); i++){
-        if(lexemes[i] == "\t") cout << "indent ";
-        else if(lexemes[i] == "\n") cout << "linebreak ";
-        else cout << lexemes[i] << " ";
+        if(lexemes[i] == "\t") log("indent ");
+        else if(lexemes[i] == "\n") log("linebreak ");
+        else log("%s ", lexemes[i].c_str());
     }
-    cout << endl;
+    log("\n");
 
-    printf("PRINTING TOKENS\n");
+    log("PRINTING TOKENS\n");
     for(int i = 0; i < tokens.size(); i++){
-        cout << tksnames[tokens[i]] << " ";
+        log("%s ", tksnames[tokens[i]].c_str());
+        //cout << tksnames[tokens[i]] << " ";
     }
-    cout << endl;
+    log("\n");
 
-    printf("\nPYTHON PROGRAM OUTPUT\n%s\n", outputStream.c_str());
+    //printf("\nPYTHON PROGRAM OUTPUT\n%s\n", outputStream.c_str());
+    
+    //outputStream contains all the output produced by the python file
+    cout << outputStream << endl;
+
+    logFile.close();
 
     return 0;
+}
+
+void log(const char* line, ...){
+    va_list argptr;
+    va_start(argptr, line);
+    char buffer[1024];
+    vsnprintf(buffer, 256, line, argptr);
+    logFile << buffer;
+    memset(buffer, 0, sizeof(buffer));
+    va_end(argptr);
 }

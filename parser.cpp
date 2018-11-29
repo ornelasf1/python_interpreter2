@@ -69,55 +69,55 @@ std::vector<Scope*> scopes;
 Scope* currentScope = new Scope();
 
 void printVariables(string name, std::vector<Variable*> vec, Scope* sc){
-    printf("Printing variables of %s in scope level %i:\n", name.c_str(), sc->scopeLevel);
+    log("Printing variables of %s in scope level %i:\n", name.c_str(), sc->scopeLevel);
     string aux;
     for(int i = 0; i < vec.size(); i++){
         aux = vec[i]->isFunction? "Yes" : "No";
-        printf("  Name: %s | Value: %s | isFunction: %s\n", vec[i]->name.c_str(), vec[i]->value.c_str(), aux.c_str());
+        log("  Name: %s | Value: %s | isFunction: %s\n", vec[i]->name.c_str(), vec[i]->value.c_str(), aux.c_str());
     }
-    printf("End printing variables of %s\n", name.c_str());
+    log("End printing variables of %s\n", name.c_str());
 }
 
 void parse(){
-    printf("Enter parse\nParsing '%s'\n", lexeme.c_str());
+    log("Enter parse\nParsing '%s'\n", lexeme.c_str());
     if(nextToken == IDENTIFIER){
         //updateCurrentScope();
         if(currentScope->fetchFunction(lexeme) != NULL){
 
         }if(lexeme == "print"){
-            printf("Producing Print Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+            log("Producing Print Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
             printRule();
         }else if(lexeme == "def"){
-            printf("Producing Function Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+            log("Producing Function Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
             functionRule();
         }else if(lexeme == "if"){
-            printf("Producing IfStmt Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+            log("Producing IfStmt Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
             ifstmtRule();
         }else if(lexeme == "return"){
-            printf("Setting return value for func '%s' with lexeme '%s' and scope level %i\n", currentScope->actingFunctionName.c_str(), lexeme.c_str(), currentScope->scopeLevel);
+            log("Setting return value for func '%s' with lexeme '%s' and scope level %i\n", currentScope->actingFunctionName.c_str(), lexeme.c_str(), currentScope->scopeLevel);
             assignFunctionValue();
         }else{
             string id = lexeme;
             lex();
             if(nextToken == ASSIGN_OP){
-                printf("Producing Assignment Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                log("Producing Assignment Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                 assignmentRule(id);
             }else if(nextToken == LEFT_PAREN){
-                printf("Producing Function Call Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                log("Producing Function Call Rule with lexeme '%s' and scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                 functionCallRule(id);
             }
         }
     }else if(nextToken == LINEBREAK){
-        printf("LINEBREAK ignored :(\n");
+        log("LINEBREAK ignored :(\n");
         lex();
     }else{
-        printf("Parse doesn't recognize token '%s' and scope level '%i'\n", lexeme.c_str(), currentScope->scopeLevel);
+        log("Parse doesn't recognize token '%s' and scope level '%i'\n", lexeme.c_str(), currentScope->scopeLevel);
         lex();
     }
 }
 
 void printRule(){
-    printf("Print rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("Print rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 
     updateCurrentScope();
     string printString = "";
@@ -135,7 +135,7 @@ void printRule(){
 
                         if (nextToken == STRING_QUOTE){
                             lex();
-                            printf("print works str: %s\n", printString.c_str());
+                            log("print works str: %s\n", printString.c_str());
                             if (nextToken == RIGHT_PAREN){
                                 lex();
                                 if (nextToken == LINEBREAK || nextToken == END){
@@ -147,7 +147,7 @@ void printRule(){
                                     throw string("Expected \\n after )");
                                 }
                             }else{
-                                printf("str: Failed ) and moving to %s\n", lexeme.c_str());
+                                log("str: Failed ) and moving to %s\n", lexeme.c_str());
                                 //throw string("Expected ) after \"");
                             }
                         }else{
@@ -159,45 +159,41 @@ void printRule(){
                 }else if (nextToken == IDENTIFIER){
                     string varValue = variableLookup(lexeme);
                     printString += varValue;
-                    printf("print works var: %s\n", printString.c_str());
+                    log("print works var: %s\n", printString.c_str());
                     lex();
                     if (nextToken == RIGHT_PAREN){
                         lex();
-                        printf("%d\n", nextToken);
+                        log("%d\n", nextToken);
                         if (nextToken == LINEBREAK || nextToken == END){
                             lex();
                             consumeIndents();
-                            //if(numOfIndents == 0) codeBlockMode = false;
                             break;
                         }else{
                             throw string("Expected \\n after )");
                         }
                     }else{
-                        printf("var: Failed ) and moving to %s\n", lexeme.c_str());
-                        //throw string("Expected ) after variable");
+                        log("var: Failed ) and moving to %s\n", lexeme.c_str());
                     }
                 }else if(nextToken == INTEGER){
                     printString += lexeme;
-                    printf("print works integer: %s\n", printString.c_str());
+                    log("print works integer: %s\n", printString.c_str());
                     lex();
                     if (nextToken == RIGHT_PAREN){
                         lex();
-                        printf("%d\n", nextToken);
+                        log("%d\n", nextToken);
                         if (nextToken == LINEBREAK || nextToken == END){
                             lex();
                             consumeIndents();
-                            //if(numOfIndents == 0) codeBlockMode = false;
                             break;
                         }else{
                             throw string("Expected \\n after )");
                         }
                     }else{
-                        printf("var: Failed ) and moving to %s\n", lexeme.c_str());
-                        //throw string("Expected ) after variable");
+                        log("var: Failed ) and moving to %s\n", lexeme.c_str());
                     }
                 }
             }while(nextToken == COMMA);
-            printf("OUTPUT: %s\n", printString.c_str());
+            log("OUTPUT: %s\n", printString.c_str());
         }else{
             throw string("Expected ( after 'print'");
         }
@@ -205,15 +201,17 @@ void printRule(){
 
         Scope* temp = currentScope->getFunctionScope();
         if(temp->functionMode){
-            printf("Print rule assigning string to scope with function name '%s' back to scope level %i\n", temp->actingFunctionName.c_str(), temp->outerScope->scopeLevel);
+            printVariables(temp->actingFunctionName, temp->scopeVariables, temp);
+            printVariables(temp->outerScope->actingFunctionName, temp->outerScope->scopeVariables, temp->outerScope);
+            log("Print rule assigning string to scope with function name '%s' back to scope level %i\n", temp->actingFunctionName.c_str(), temp->outerScope->scopeLevel);
             temp->outerScope->fetchFunction(temp->actingFunctionName)->printCalls += (printString + "\n");
         }else{
             outputStream += (printString + "\n");
         }
-        printf("Print rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+        log("Print rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     }catch(string s){
-        printf("Syntax Error: %s\n", s.c_str());
-        outputStream += ("\nSyntax Error: "+s);
+        log("Syntax Error in line %i: %s\n", lineNumber, s.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + s);
         endProgram = true;
     }
 }
@@ -221,7 +219,7 @@ void printRule(){
 
 void assignmentRule(string varName){
     updateCurrentScope();
-    printf("Assignment rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("Assignment rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     string variableName = varName;
     string stringValue = "";
     int exprValue;
@@ -231,10 +229,6 @@ void assignmentRule(string varName){
         lex();
         expressionRule();
         var->value = evaluate(exprTokens);
-        // while(!exprTokens.empty()){
-        //     printf("%s\n", exprTokens[0].c_str());
-        //     exprTokens.erase(exprTokens.begin());
-        // }
         exprTokens.clear();
         if(nextToken == LINEBREAK){
             //if(currentScope->scopeLevel != 0){
@@ -244,23 +238,24 @@ void assignmentRule(string varName){
             throw string("Error after assignment line");
         }
 
-        //printf("Value is %s\n", var->value.c_str());
+        //log("Value is %s\n", var->value.c_str());
         //userVariables.push_back(var);
         currentScope->scopeVariables.push_back(var);
-        printf("Assign '%s' to '%s'\n", var->value.c_str(), var->name.c_str());
+        log("Assign '%s' to '%s'\n", var->value.c_str(), var->name.c_str());
         //Exits with LINEBREAK
 
     }catch(string s){
-        printf("Syntax Error: %s\n", s.c_str());
-        outputStream += ("\nSyntax Error: "+s);
+        log("Syntax Error in line %i: %s\n", lineNumber, s.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + s);
         endProgram = true;
     }
-    printf("Assignment rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("Assignment rule exitting with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 
 void functionRule(){
-    printf("Function rule entered\n");
+    updateCurrentScope();
+    log("Function rule entered\n");
     int indentsToDefFunc;
     string functionName;
     Function* func = new Function();
@@ -283,8 +278,7 @@ void functionRule(){
                             lex();
                             consumeIndents();
                             if(numOfIndents == indentsToDefFunc + 1){
-                                printf("Creating new scope in 'def' call\n");
-                                //functionMode = true;
+                                log("Creating new scope in 'def' call\n");
                                 Scope* def_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                                 currentScope->innerScope = def_Scope;
                                 def_Scope->outerScope = currentScope;
@@ -293,13 +287,12 @@ void functionRule(){
                                 currentScope->actingFunctionName = functionName;
                                 do{
                                     if(nextToken == INDENT) consumeIndents();
-                                    printf("DEF_FUNC: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                    log("DEF_FUNC: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                     parse();
-                                    printf("DEF_FUNC: Back to function loop with '%s' and no. of indents: '%i'\n", lexeme.c_str(), numOfIndents);
+                                    log("DEF_FUNC: Back to function loop with '%s' and no. of indents: '%i'\n", lexeme.c_str(), numOfIndents);
                                 }while(numOfIndents == indentsToDefFunc + 1 || nextToken == LINEBREAK || nextToken == INDENT);
-                                printf("DEF_FUNC: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                log("DEF_FUNC: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                 currentScope->functionMode = false;
-                                //functionMode = false;
                             }else{
                                 throw string("Expected statement block after function decleration");
                             }
@@ -319,18 +312,18 @@ void functionRule(){
             throw string("Expected function name after 'def' keyword");
         }
     }catch(string err){
-        printf("Syntax Error: %s\n", err.c_str());
-        outputStream += ("\nSyntax Error: "+err);
+        log("Syntax Error in line %i: %s\n", lineNumber, err.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + err);
         endProgram = true;
     }
 }
 
 void functionCallRule(string funcName){
-    printf("Function CALL rule entered with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("Function CALL rule entered with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     try{
         lex();
         if(nextToken == RIGHT_PAREN){
-            printf("Function call in scope level %i\n", currentScope->scopeLevel);
+            log("Function call in scope level %i\n", currentScope->scopeLevel);
             outputStream += currentScope->fetchFunction(funcName)->printCalls;
             lex();
             if (nextToken == LINEBREAK || nextToken == END){
@@ -344,20 +337,20 @@ void functionCallRule(string funcName){
             throw string("Expected closing parentheses to '('");
         }
     }catch(string err){
-        printf("Syntax Error: %s\n", err.c_str());
-        outputStream += ("\nSyntax Error: "+err);
+        log("Syntax Error in line %i: %s\n", lineNumber, err.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + err);
         endProgram = true;
     }
-    printf("Function CALL rule exitted with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("Function CALL rule exitted with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 void assignFunctionValue(){
     try{
         updateCurrentScope();
         lex();
-        if(nextToken == IDENTIFIER){
-            string varValue = variableLookup(lexeme);
-            printf("Setting value of function '%s' to '%s' in scope level %i\n", currentScope->actingFunctionName.c_str(), varValue.c_str(), currentScope->scopeLevel);
+        if(nextToken == IDENTIFIER || nextToken == INTEGER){
+            string varValue = (nextToken == IDENTIFIER)? variableLookup(lexeme) : lexeme;
+            log("Setting value of function '%s' to '%s' in scope level %i\n", currentScope->actingFunctionName.c_str(), varValue.c_str(), currentScope->scopeLevel);
             currentScope->outerScope->fetchFunction(currentScope->actingFunctionName.c_str())->value = varValue;
             lex();
             if (nextToken == LINEBREAK || nextToken == END){
@@ -371,14 +364,14 @@ void assignFunctionValue(){
             throw string("Expected identifier after return keyword");
         }
     }catch(string err){
-        printf("Syntax Error: %s\n", err.c_str());
-        outputStream += ("\nSyntax Error: "+err);
+        log("Syntax Error in line %i: %s\n", lineNumber, err.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + err);
         endProgram = true;
     }
 }
 
 void ifstmtRule(){
-    printf("If Stmt rule entered with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("If Stmt rule entered with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     int indentsToIfStmt;
     bool condition;
     try{
@@ -388,7 +381,7 @@ void ifstmtRule(){
             if(nextToken == LEFT_PAREN){ lex(); left_parenthesis = true; }
             condition = booleanExprRule();
             if(condition){
-                printf("if resulted in TRUE next lexeme is %s\n", lexeme.c_str());
+                log("if resulted in TRUE next lexeme is %s\n", lexeme.c_str());
                 if(left_parenthesis) lex();
                 if(nextToken == COLON){
                     indentsToIfStmt = numOfIndents;
@@ -397,17 +390,31 @@ void ifstmtRule(){
                         lex();
                         consumeIndents();
                         if(numOfIndents == indentsToIfStmt + 1){
-                            printf("Creating new scope in 'if' call\n");
+                            log("Creating new scope in 'if' call\n");
                             Scope* if_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                             currentScope->innerScope = if_Scope;
                             if_Scope->outerScope = currentScope;
                             do{
                                 if(nextToken == INDENT) consumeIndents();
-                                printf("IFSTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                log("IFSTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                 parse();
                             }while(numOfIndents == indentsToIfStmt + 1 || nextToken == LINEBREAK || nextToken == INDENT);
-                            printf("IFSTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                            log("IFSTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                             currentScope->outerScope->scopeVariables = currentScope->scopeVariables;
+
+                            if(numOfIndents == indentsToIfStmt && nextToken == IDENTIFIER && lexeme == "else"){
+                                log("TRUE: Skipping else code block\n");
+                                do{
+                                    log("IFSTMT TRUE SKIP ELSE: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                    while(nextToken != LINEBREAK){
+                                        log("IFSTMT TRUE SKIP ELSE: lex is %s : Skipping code block statements\n", lexeme.c_str());
+                                        lex();
+                                        if(nextToken == END) return;
+                                    }
+                                    lex();
+                                    consumeIndents();
+                                }while(numOfIndents == indentsToIfStmt + 1);
+                            }
                         }else{
                             throw string("Expected statement block after 'if' call");
                         }
@@ -418,7 +425,7 @@ void ifstmtRule(){
                     throw string("Expected ':' after 'if( )'");
                 }
             }else{
-                printf("if resulted in FALSE next lexeme is %s\n", lexeme.c_str());
+                log("if resulted in FALSE next lexeme is %s\n", lexeme.c_str());
                 if(left_parenthesis) lex();
                 if(nextToken == COLON){
                     indentsToIfStmt = numOfIndents;
@@ -426,13 +433,12 @@ void ifstmtRule(){
                     if(nextToken == LINEBREAK){
                         lex();
                         consumeIndents();
-                        codeBlockMode = true;
                         if(numOfIndents == indentsToIfStmt + 1){
-                            printf("FALSE: Not Creating new scope in 'if' call\n");
+                            log("FALSE: Not Creating new scope in 'if' call\n");
                             do{
-                                printf("IFSTMT FALSE: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                log("IFSTMT FALSE: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                 while(nextToken != LINEBREAK){
-                                    printf("IFSTMT FALSE: Skipping code block statements\n");
+                                    log("IFSTMT FALSE: lex is %s : Skipping code block statements\n", lexeme.c_str());
                                     lex();
                                     if(nextToken == END) return;
                                 }
@@ -448,17 +454,17 @@ void ifstmtRule(){
                                         lex();
                                         consumeIndents();
                                         if(numOfIndents == indentsToIfStmt + 1){
-                                            printf("Creating new scope in 'else' call\n");
+                                            log("Creating new scope in 'else' call\n");
                                             Scope* if_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                                             currentScope->innerScope = if_Scope;
                                             if_Scope->outerScope = currentScope;
                                             do{
                                                 if(nextToken == INDENT) consumeIndents();
-                                                printf("ELSESTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                                log("ELSESTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                                 parse();
                                                 if(nextToken == END) return;
                                             }while(numOfIndents == indentsToIfStmt + 1 || nextToken == LINEBREAK || nextToken == INDENT);
-                                            printf("ELSESTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                            log("ELSESTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                             currentScope->outerScope->scopeVariables = currentScope->scopeVariables;
                                         }else{
                                             throw string("Expected statement block after 'else' call");
@@ -468,7 +474,7 @@ void ifstmtRule(){
                                     }
                                 }
                             }
-                            printf("IFSTMT FALSE: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                            log("IFSTMT FALSE: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                         }else{
                             throw string("Expected statement block after 'if' call");
                         }
@@ -483,11 +489,11 @@ void ifstmtRule(){
             throw string("Expected '(' after 'if' keyword");
         }
     }catch(string err){
-        printf("Syntax Error: %s\n", err.c_str());
-        outputStream += ("\nSyntax Error: "+err);
+        log("Syntax Error in line %i: %s\n", lineNumber, err.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + err);
         endProgram = true;
     }
-    printf("If Stmt rule exitted with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
+    log("If Stmt rule exitted with scope level %i and token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 }
 
 bool booleanExprRule(){
@@ -501,45 +507,57 @@ bool booleanExprRule(){
         return false;
     }
     operand1 = evaluate(exprTokens);
-    printf("Bool expr: operand 1 is '%s'\n", operand1.c_str());
+    log("Bool expr: operand 1 is '%s'\n", operand1.c_str());
     if(nextToken == COND_EQUAL || nextToken == COND_NOT_OP){
+        int cond_operator = nextToken;
         lex();
         expressionRule();
         operand2 = evaluate(exprTokens);
-        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
-        if(nextToken == RIGHT_PAREN){
-            printf("Compare %s equivalence to %s\n", operand1.c_str(), operand2.c_str());
-            return atoi(operand1.c_str()) == atoi(operand2.c_str());
+        log("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN || nextToken == COLON){
+            log("Compare %s equivalence to %s\n", operand1.c_str(), operand2.c_str());
+            if(cond_operator == COND_EQUAL) return atoi(operand1.c_str()) == atoi(operand2.c_str());
+            else if(cond_operator == COND_NOT_OP) return atoi(operand1.c_str()) != atoi(operand2.c_str());
+        }else{
+            throw string("Enclosing characters for condition missing");
         }
     }else if(nextToken == COND_GTEQ){
         lex();
         expressionRule();
         operand2 = evaluate(exprTokens);
-        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
-        if(nextToken == RIGHT_PAREN){
+        log("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN || nextToken == COLON){
             return atoi(operand1.c_str()) >= atoi(operand2.c_str());
+        }else{
+            throw string("Enclosing characters for condition missing");
         }
     }else if(nextToken == COND_GT){
         lex();
         expressionRule();
         operand2 = evaluate(exprTokens);
-        printf("Bool expr: operand 2 is '%s'\n", operand2.c_str());
-        if(nextToken == RIGHT_PAREN){
+        log("Bool expr: operand 2 is '%s'\n", operand2.c_str());
+        if(nextToken == RIGHT_PAREN || nextToken == COLON){
             return atoi(operand1.c_str()) > atoi(operand2.c_str());
+        }else{
+            throw string("Enclosing characters for condition missing");
         }
     }else if(nextToken == COND_LTEQ){
         lex();
         expressionRule();
         operand2 = evaluate(exprTokens);
-        if(nextToken == RIGHT_PAREN){
+        if(nextToken == RIGHT_PAREN || nextToken == COLON){
             return atoi(operand1.c_str()) <= atoi(operand2.c_str());
+        }else{
+            throw string("Enclosing characters for condition missing");
         }
     }else if(nextToken == COND_LT){
         lex();
         expressionRule();
         operand2 = evaluate(exprTokens);
-        if(nextToken == RIGHT_PAREN){
+        if(nextToken == RIGHT_PAREN || nextToken == COLON){
             return atoi(operand1.c_str()) < atoi(operand2.c_str());
+        }else{
+            throw string("Enclosing characters for condition missing");
         }
     }else{
         throw string("Operator '" + lexeme + "' not found");
@@ -548,7 +566,7 @@ bool booleanExprRule(){
 }
 
 void expressionRule(){
-    printf("Expression rule entered with '%s'\n", lexeme.c_str());
+    log("Expression rule entered with '%s'\n", lexeme.c_str());
 
     try{
         termRule();
@@ -558,14 +576,14 @@ void expressionRule(){
             termRule();
         }
     }catch(string s){
-        printf("Syntax Error: %s\n", s.c_str());
-        outputStream += ("\nSyntax Error: "+s);
+        log("Syntax Error in line %i: %s\n", lineNumber, s.c_str());
+        outputStream += ("\nSyntax Error in line " + std::to_string(lineNumber) + ": " + s);
         endProgram = true;
     }
 }
 
 void termRule(){
-    printf("Term rule entered with '%s'\n", lexeme.c_str());
+    log("Term rule entered with '%s'\n", lexeme.c_str());
 
     factorRule();
     while(nextToken == MULT_OP || nextToken == DIV_OP){
@@ -576,7 +594,7 @@ void termRule(){
 }
 
 void factorRule(){
-    printf("Factor rule entered with '%s'\n", lexeme.c_str());
+    log("Factor rule entered with '%s'\n", lexeme.c_str());
     
     if(nextToken == IDENTIFIER || nextToken == INTEGER){
         if(lexeme == "True" || lexeme == "False"){
@@ -647,12 +665,12 @@ string evaluate(std::vector<string> s){
 
     for(int i = 0; i < s.size(); i++){
         if(op_prec(s[i].c_str()) == 0){
-            printf("%s is not an operator\n", s[i].c_str());
+            log("%s is not an operator\n", s[i].c_str());
             
             //postfix += s[i];
             evaluateStack.push(s[i]);
         }else{
-            printf("%s is an operator\n", s[i].c_str());
+            log("%s is an operator\n", s[i].c_str());
             if(pfStack.empty()){
                 pfStack.push(s[i]);
             }else{
@@ -708,7 +726,7 @@ string evaluate(std::vector<string> s){
             else results.push(evaluateStack.top());
             evaluateStack.pop();
         }else{
-            printf("%s is an operator for evaluating", evaluateStack.top().c_str());
+            log("%s is an operator for evaluating", evaluateStack.top().c_str());
 
             operand1 = results.top(); results.pop();
             operand2 = results.top(); results.pop();
@@ -717,7 +735,7 @@ string evaluate(std::vector<string> s){
             if(!is_number(operand2)) operand2 = variableLookup(operand2);
 
             op = evaluateStack.top(); evaluateStack.pop();
-            printf(" - evaluating: %s %s %s - ", operand1.c_str(), op.c_str(), operand2.c_str());
+            log(" - evaluating: %s %s %s - ", operand1.c_str(), op.c_str(), operand2.c_str());
 
             if(op == "+"){
                 result = std::to_string(atoi(operand1.c_str()) + atoi(operand2.c_str()));
@@ -729,20 +747,20 @@ string evaluate(std::vector<string> s){
                 result = std::to_string(atoi(operand2.c_str()) / atoi(operand1.c_str()));
             }
             results.push(result);
-            printf(" result is %s\n", result.c_str());
+            log(" result is %s\n", result.c_str());
         }
     }
-    printf("Result is %s\n", results.top().c_str());
+    log("Result is %s\n", results.top().c_str());
     return results.top();
 }
 
 string variableLookup(string var){
-    printf("Searching for variable %s in scope level %i\n", var.c_str(), currentScope->scopeLevel);
-    printf("Variables in scope level %i:\n", currentScope->scopeLevel);
+    log("Searching for variable %s in scope level %i\n", var.c_str(), currentScope->scopeLevel);
+    log("Variables in scope level %i:\n", currentScope->scopeLevel);
     for(Variable* v : currentScope->scopeVariables){
-        printf("Var: %s\n", v->name.c_str());
+        log("Var: %s\n", v->name.c_str());
     }
-    printf("\n");
+    log("\n");
     string latestVarValue = "";;
     for(Variable* v : currentScope->scopeVariables){
         if(v->name == var){
@@ -751,12 +769,12 @@ string variableLookup(string var){
     }
     Function* func = currentScope->fetchFunction(var);
     if(func == NULL) throw string("Variable " + var + " is undefined");
-    printf("Searching for function %s\n", var.c_str());
+    log("Searching for function %s\n", var.c_str());
     if(func->isFunction){
-        printf("Variable %s IS a function\n", var.c_str());
+        log("Variable %s IS a function\n", var.c_str());
         outputStream += (func->printCalls);
     }else{
-        printf("Variable %s IS NOT a function\n", var.c_str());
+        log("Variable %s IS NOT a function\n", var.c_str());
     }
     if(latestVarValue != "") return latestVarValue;
     else throw string("Variable " + var + " is undefined");
@@ -766,7 +784,7 @@ string variableLookup(string var){
 void consumeIndents(){
     while(nextToken == INDENT){
         numOfIndents++;
-        printf("Hit INDENT, increase indent count: %i\n", numOfIndents);
+        log("Hit INDENT, increase indent count: %i\n", numOfIndents);
         lex();
     }
     //Exits with identifier being the next token.
@@ -774,17 +792,17 @@ void consumeIndents(){
 
 void updateCurrentScope(){
     if(numOfIndents > currentScope->scopeLevel){
-        printf("%i > %i : Traverse into inner scope\n", numOfIndents, currentScope->scopeLevel);
+        log("%i > %i : Traverse into inner scope\n", numOfIndents, currentScope->scopeLevel);
         while(numOfIndents > currentScope->scopeLevel && currentScope->innerScope != NULL){
             currentScope = currentScope->innerScope;
-            printf("Entered inner scope with level %i\n", currentScope->scopeLevel);
+            log("Entered inner scope with level %i\n", currentScope->scopeLevel);
         }
     }
     else if(numOfIndents < currentScope->scopeLevel){
-        printf("%i < %i : Traverse into outer scope\n", numOfIndents, currentScope->scopeLevel);
+        log("%i < %i : Traverse into outer scope\n", numOfIndents, currentScope->scopeLevel);
         while(numOfIndents < currentScope->scopeLevel && currentScope->outerScope != NULL){
             currentScope = currentScope->outerScope;
-            printf("Entered outer scope with level %i\n", currentScope->scopeLevel);
+            log("Entered outer scope with level %i\n", currentScope->scopeLevel);
         }
     }
 }
@@ -828,11 +846,13 @@ Scope* Scope::getFunctionScope(){
     Scope* trav = currentScope;
     while(trav != NULL && trav->outerScope != NULL){
         string boo = trav->functionMode? "Is in function mode" : "Not in function mode";
-        printf("%s\n", boo.c_str());
+        log("Current Scope(%i) %s\n", trav->scopeLevel, boo.c_str());
         if(trav->functionMode){
+            log("Return scope with level %i\n", trav->scopeLevel);
             return trav;
         }else{
             trav = trav->outerScope;
+            log("Traverse to outer scope with level %i\n", trav->scopeLevel);
         };
     }
     return trav;

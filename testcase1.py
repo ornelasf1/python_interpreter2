@@ -7,4 +7,11 @@ if (x>80000):
 if (x<80000):
     d = x * y
 
+def f():
+    print("yes")
+    return 5
+
+print("no")
+print(f())
+
 print("d=",d)

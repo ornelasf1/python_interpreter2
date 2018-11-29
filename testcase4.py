@@ -11,7 +11,7 @@ def f():
 
 x = f()
 
-if(x!=1000):
+if (x!=1000):
     print ("value is not 1000, it is =",x)
 else:
     print ("value is 1000")
