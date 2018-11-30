@@ -89,6 +89,8 @@ int main(int argc, char** argv){
         }
     }catch(string s){
         printf("Input: mypython <file.py>\n");
+    }catch(...){
+        printf("Input: mypython <file.py>\n");
     }
 
 

@@ -6,7 +6,6 @@ using namespace std;
 
 void getChar(){
     if(inputFile.get(nextChar)){
-        //cout << endl << "Retrieved '" << nextChar << "' from inputfile" << endl;
         log("\nRetrieved '%c' from inputfile\n", nextChar);
         if(string_literal){
             log("SL_Char: %c\n", nextChar);
@@ -23,7 +22,8 @@ void getChar(){
             log("Dig: %c\n", nextChar);
             charClass = DIGIT;
         }else{
-            if(nextChar == '\n') log("Other: \\n\n"); 
+            if(nextChar == '\n') log("Other: \\n\n");
+            else if(nextChar == '\r') log("Other: \\r\n");
             else if(nextChar == ' ') log("Other: space_char\n");
             else log("Other: %c\n", nextChar);
             charClass = OTHER;
@@ -31,16 +31,12 @@ void getChar(){
                 string_literal = true;
                 log("Toggle string literal ON\n");
             }
-            // if(string_literal && nextChar == ' '){
-            //     log("Make space into letter class\n");
-            //     charClass = LETTER;
-            // }
+
         }
     }else{
         log("EOF\n");
         nextChar = '\0';
         charClass = CHAR_END;
-        //nextToken = END;
     }
 }
 void lex(){
@@ -105,25 +101,28 @@ void lex(){
                 inputFile.putback(nextChar);
             }
         }
+
         getChar();
+        
         break;
     default:
         log("WE END\n");
         nextToken = END;
         break;
     }
+
+    //Skips carriege return for files written in a windows environment
+    if(nextChar == '\r') getChar();
+
     log("Resulted in TOKEN: %i\n", nextToken);
     log("%s -> %s\n", oldLex.c_str(), lexeme.c_str());
 
     if (lexeme == "\n"){
         log("Found lexeme linebreak '%s'\n", lexeme.c_str());
-        //cout << "Found lexeme linebreak '" << lexeme << "'" << endl << endl;
     }else if (lexeme == "\t"){
         log("Found lexeme indent '%s'\n", lexeme.c_str());
-        //cout << "Found lexeme indent '" << lexeme << "'" << endl << endl;
     }else{
         log("Found lexeme '%s'\n", lexeme.c_str());
-        //cout << "Found lexeme '" << lexeme << "'" << endl << endl;
     }
     tokens.push_back(nextToken);
     lexemes.push_back(lexeme);
@@ -144,7 +143,6 @@ void processSpaces(){
     while(isspace(nextChar) && nextChar != '\n' && !string_literal){
         string msg = (indent)? "indent is true" : "indent is false";
         log("%i and %s\n", spaces, msg.c_str());
-        //cout << spaces << " and " << (indent? "indent is true" : "indent is false") << endl;
         if(indent && --spaces == 0){
             charClass = OTHER;
             nextChar = '\t';
@@ -230,7 +228,7 @@ void lookup(char c){
 }
 
 void addChar(){
-    if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') log("Add space\n");//cout << "Add space" << endl;
-    else log("Added '%c' to lexeme\n", nextChar);//cout << "Added '" << nextChar << "' to lexeme" << endl;
+    if(isspace(nextChar) && nextChar != '\n' && nextChar != '\t') log("Add space\n");
+    else log("Added '%c' to lexeme\n", nextChar);
     lexeme += nextChar;
 };
