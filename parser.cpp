@@ -81,7 +81,7 @@ void printVariables(string name, std::vector<Variable*> vec, Scope* sc){
 void parse(){
     log("Enter parse\nParsing '%s'\n", lexeme.c_str());
     if(nextToken == IDENTIFIER){
-        //updateCurrentScope();
+        updateCurrentScope();
         if(currentScope->fetchFunction(lexeme) != NULL){
 
         }if(lexeme == "print"){
@@ -119,7 +119,6 @@ void parse(){
 void printRule(){
     log("Print rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
 
-    updateCurrentScope();
     string printString = "";
     try{
         lex();
@@ -218,7 +217,6 @@ void printRule(){
 
 
 void assignmentRule(string varName){
-    updateCurrentScope();
     log("Assignment rule entered with scope level %i and with token '%s'\n", currentScope->scopeLevel, lexeme.c_str());
     string variableName = varName;
     string stringValue = "";
@@ -254,7 +252,6 @@ void assignmentRule(string varName){
 
 
 void functionRule(){
-    updateCurrentScope();
     log("Function rule entered\n");
     int indentsToDefFunc;
     string functionName;
@@ -277,8 +274,12 @@ void functionRule(){
                         if(nextToken == LINEBREAK){
                             lex();
                             consumeIndents();
+                            while(nextToken == LINEBREAK){
+                                lex();
+                                consumeIndents();
+                            }
                             if(numOfIndents == indentsToDefFunc + 1){
-                                log("Creating new scope in 'def' call\n");
+                                log("(%i) Creating new scope in 'def' call\n", currentScope->scopeLevel);
                                 Scope* def_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                                 currentScope->innerScope = def_Scope;
                                 def_Scope->outerScope = currentScope;
@@ -346,7 +347,6 @@ void functionCallRule(string funcName){
 
 void assignFunctionValue(){
     try{
-        updateCurrentScope();
         lex();
         if(nextToken == IDENTIFIER || nextToken == INTEGER){
             string varValue = (nextToken == IDENTIFIER)? variableLookup(lexeme) : lexeme;
@@ -381,7 +381,7 @@ void ifstmtRule(){
             if(nextToken == LEFT_PAREN){ lex(); left_parenthesis = true; }
             condition = booleanExprRule();
             if(condition){
-                log("if resulted in TRUE next lexeme is %s\n", lexeme.c_str());
+                log("(%i) if resulted in TRUE next lexeme is '%s'\n", currentScope->scopeLevel, lexeme.c_str());
                 if(left_parenthesis) lex();
                 if(nextToken == COLON){
                     indentsToIfStmt = numOfIndents;
@@ -389,15 +389,20 @@ void ifstmtRule(){
                     if(nextToken == LINEBREAK){
                         lex();
                         consumeIndents();
+                        while(nextToken == LINEBREAK){
+                            lex();
+                            consumeIndents();
+                        }
                         if(numOfIndents == indentsToIfStmt + 1){
-                            log("Creating new scope in 'if' call\n");
+                            log("(%i) Creating new scope in 'if' call\n", currentScope->scopeLevel);
                             Scope* if_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                             currentScope->innerScope = if_Scope;
                             if_Scope->outerScope = currentScope;
                             do{
                                 if(nextToken == INDENT) consumeIndents();
-                                log("IFSTMT: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                log("IFSTMT: Looping with '%s' and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                 parse();
+                                if(nextToken == END) return;
                             }while(numOfIndents == indentsToIfStmt + 1 || nextToken == LINEBREAK || nextToken == INDENT);
                             log("IFSTMT: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                             currentScope->outerScope->scopeVariables = currentScope->scopeVariables;
@@ -405,15 +410,18 @@ void ifstmtRule(){
                             if(numOfIndents == indentsToIfStmt && nextToken == IDENTIFIER && lexeme == "else"){
                                 log("TRUE: Skipping else code block\n");
                                 do{
-                                    log("IFSTMT TRUE SKIP ELSE: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
+                                    log("IFSTMT TRUE SKIP ELSE: Looping with '%s' and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                     while(nextToken != LINEBREAK){
-                                        log("IFSTMT TRUE SKIP ELSE: lex is %s : Skipping code block statements\n", lexeme.c_str());
+                                        log("IFSTMT TRUE SKIP ELSE: lex is '%s' : Skipping code block statements\n", lexeme.c_str());
                                         lex();
                                         if(nextToken == END) return;
                                     }
                                     lex();
                                     consumeIndents();
-                                }while(numOfIndents == indentsToIfStmt + 1);
+                                    if(numOfIndents <= indentsToIfStmt && nextToken == IDENTIFIER){
+                                        break;
+                                    }
+                                }while(true);
                             }
                         }else{
                             throw string("Expected statement block after 'if' call");
@@ -433,6 +441,10 @@ void ifstmtRule(){
                     if(nextToken == LINEBREAK){
                         lex();
                         consumeIndents();
+                        while(nextToken == LINEBREAK){
+                            lex();
+                            consumeIndents();
+                        }
                         if(numOfIndents == indentsToIfStmt + 1){
                             log("FALSE: Not Creating new scope in 'if' call\n");
                             do{
@@ -444,7 +456,10 @@ void ifstmtRule(){
                                 }
                                 lex();
                                 consumeIndents();
-                            }while(numOfIndents == indentsToIfStmt + 1);
+                                if(numOfIndents == indentsToIfStmt && nextToken == IDENTIFIER){
+                                    break;
+                                }
+                            }while(true);
 
                             if(numOfIndents == indentsToIfStmt && nextToken == IDENTIFIER && lexeme == "else"){
                                 lex();
@@ -453,8 +468,12 @@ void ifstmtRule(){
                                     if(nextToken == LINEBREAK){
                                         lex();
                                         consumeIndents();
+                                        while(nextToken == LINEBREAK){
+                                            lex();
+                                            consumeIndents();
+                                        }
                                         if(numOfIndents == indentsToIfStmt + 1){
-                                            log("Creating new scope in 'else' call\n");
+                                            log("(%i) Creating new scope in 'else' call\n", currentScope->scopeLevel);
                                             Scope* if_Scope = new Scope(currentScope->scopeVariables, currentScope->scopeLevel);
                                             currentScope->innerScope = if_Scope;
                                             if_Scope->outerScope = currentScope;
@@ -788,6 +807,14 @@ void consumeIndents(){
         lex();
     }
     //Exits with identifier being the next token.
+}
+
+void processEmptyLines(){
+    while(nextToken == LINEBREAK){
+        log("Hit LINEBREAK, skipping line\n");
+        lex();
+    }
+    //Exits with identifier/indent being the next token.
 }
 
 void updateCurrentScope(){
