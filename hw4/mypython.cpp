@@ -168,14 +168,14 @@ int main(int argc, char** argv){
 }
 
 void log(const char* line, ...){
-    if(false){
-        va_list argptr;
-        va_start(argptr, line);
-        char buffer[256];
-        vsnprintf(buffer, 256, line, argptr);
-        logFile << buffer;
-        memset(buffer, 0, sizeof(buffer));
-        va_end(argptr);
+    if(true){
+        // va_list argptr;
+        // va_start(argptr, line);
+        // char buffer[256];
+        // vsnprintf(buffer, 256, line, argptr);
+        // logFile << buffer;
+        // memset(buffer, 0, sizeof(buffer));
+        // va_end(argptr);
     }else{
         printf(line);
     }
