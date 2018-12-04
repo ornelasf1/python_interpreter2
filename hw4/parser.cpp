@@ -517,6 +517,8 @@ void ifstmtRule(){
             if(nextToken == LEFT_PAREN){ lex(); left_parenthesis = true; }
             condition = booleanExprRule();
             if(condition){
+                //ifelseDepth++;
+                log("Incrementing ifelsedepth to %i\n", ifelseDepth);
                 log("(%i) if resulted in TRUE next lexeme is '%s'\n", currentScope->scopeLevel, lexeme.c_str());
                 if(left_parenthesis) lex();
                 if(nextToken == COLON){
@@ -583,6 +585,7 @@ void ifstmtRule(){
                             consumeIndents();
                         }
                         if(numOfIndents == indentsToIfStmt + 1){
+                            ifelseDepth++;
                             log("FALSE: Not Creating new scope in 'if' call\n");
                             do{
                                 log("IFSTMT FALSE: Looping with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
@@ -593,7 +596,7 @@ void ifstmtRule(){
                                 }
                                 lex();
                                 consumeIndents();
-                                if(numOfIndents == indentsToIfStmt && nextToken == IDENTIFIER){
+                                if(numOfIndents <= indentsToIfStmt && nextToken == IDENTIFIER){
                                     break;
                                 }
                             }while(true);
@@ -645,7 +648,7 @@ void ifstmtRule(){
         }else{
             throw string("Expected '(' after 'if' keyword");
         }
-        if(numOfIndents == 0){
+        if(numOfIndents == 0 || endProgram){
             int newDepth = ifelseDepth;
             if(ifelseDepth != 0) newDepth = ifelseDepth - 1;
             outputStreamIfElseLvls += (std::to_string(newDepth) + " level, ");
