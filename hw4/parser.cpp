@@ -70,6 +70,7 @@ const string reservedKeywords[] = {"print", "def", "if", "return", "and", "or"};
 int funcStackDepth = -1;
 bool killRecFunction = false;
 int ifelseDepth = 0;
+bool exprInReturn = false;
 std::vector<Scope*> scopes;
 Scope* currentScope = new Scope();
 
@@ -410,11 +411,12 @@ void functionRule(){
                                         log("Value of '%s' is already set to '%s'\n", functionName.c_str(), currentScope->getFunctionScope()->fetchFunction(functionName)->value.c_str());
                                         return;
                                     }
-                                    // if(funcStackDepth > funcStackDepthLIMIT || killRecFunction){
-                                    //     log("Kill rec function with rec depth '%i'\n", funcStackDepth);
-                                    //     killRecFunction = true;
-                                    //     return;
-                                    // }
+                                    if(funcStackDepth > funcStackDepthLIMIT || killRecFunction){
+                                        log("Kill rec function with rec depth '%i'\n", funcStackDepth);
+                                        killRecFunction = true;
+                                        log("Killing recurse with lexeme '%s'\n", lexeme.c_str());
+                                        return;
+                                    }
                                 }while(numOfIndents == indentsToDefFunc + 1 || nextToken == LINEBREAK || nextToken == INDENT);
                                 log("DEF_FUNC: EXITTING loop with %s and with scope level %i\n", lexeme.c_str(), currentScope->scopeLevel);
                                 currentScope->functionMode = false;
@@ -448,9 +450,11 @@ void functionCallRule(string funcName){
     try{
         evaluateFunctionCall(funcName);
         if(killRecFunction){
+            printf("Function '%s' does NOT terminate\n", funcName.c_str());
             killRecFunction = false;
             outputStreamRecFuncTerm += "No, ";
         }else{
+            printf("Function '%s' DOES terminate\n", funcName.c_str());
             outputStreamRecFuncTerm += "Yes, ";
         }
         // lex();
@@ -482,6 +486,15 @@ void assignFunctionValue(){
         if(nextToken == IDENTIFIER || nextToken == INTEGER){
             std::vector<string> exprTokens;
             expressionRule(exprTokens);
+            if(exprTokens.size() > 1) exprInReturn = true;
+            // if(!exprInReturn){
+            //     Scope* funcScope = currentScope->getFunctionScope();
+            //     log("ENDING EARLY\n");
+            //     funcScope->outerScope->fetchFunction(funcScope->actingFunctionName.c_str())->value = "";
+            //     exprTokens.clear();
+            //     lex();
+            //     return;
+            // }
             string varValue = evaluate(exprTokens);
 
             Scope* funcScope = currentScope->getFunctionScope();
@@ -1000,6 +1013,14 @@ void evaluateFunctionCall(string name){
                     log("Argument checking: lex after is '%s'\n", lexeme.c_str());
                     std::vector<string> exprTokens;
                     expressionRule(exprTokens);
+                    if(exprTokens.size() > 1) exprInReturn = true;
+                    // if(!exprInReturn){
+                    //     Scope* funcScope = currentScope->getFunctionScope();
+                    //     log("ENDING EARLY\n");
+                    //     exprTokens.clear();
+                    //     lex();
+                    //     return;
+                    // }
                     string value = evaluate(exprTokens);
                     //func->argsv[arguments]->value = value;
                     func->argsv[arguments]->value_s.push_back(value);
