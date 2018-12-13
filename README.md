@@ -3,10 +3,7 @@ cosc2991 1354098 Fabian Ornelas
 cosc2992 1293866 Michael Panagos
 
 Makefile will produce mypython program.
-
 - Needs to be run using std=c++11
-- 'if' syntax requires enclosing parentheses on conditions ( e.g. if(x=4) )
-- Python file needs to be LF terminated, instead of CRLF
 
 Usage: 
 ./mypython {file.py}
